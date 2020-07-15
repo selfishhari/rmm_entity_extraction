@@ -11,7 +11,6 @@ def hello_world():
 def match_user():
    if request.method == "POST":
       input_json = request.get_json()
-      print(type(input_json))
       match_user = MatchUser(input_json)
       users = match_user.matched_users()
       return users
