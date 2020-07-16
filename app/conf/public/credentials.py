@@ -1,4 +1,4 @@
 
 
-DB_USERNAME = 'root'
-DB_PASSWORD = 'doodle@123'
+DB_USERNAME = ''
+DB_PASSWORD = ''
