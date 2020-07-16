@@ -33,13 +33,19 @@ class UpdateBrandModel():
         self.output_path = output_path
 
     def expand_brand_models(self):
+
         for index, row in self.telegram_question_extract.iterrows():
+
             if type(row['model ']) == datetime.datetime:
+
                 self.telegram_question_extract.drop(index, inplace=True)
 
 
+
         for index, row in self.telegram_question_extract.iterrows():
+
             if row['brand '].find('|') != -1:
+
                 self.telegram_question_extract.drop(index, inplace=True)
 
 
@@ -64,6 +70,35 @@ class UpdateBrandModel():
 
         return all_models
 
+     def check(self,string, sub_str):
+
+        if (string.find(sub_str) == -1):
+
+            return False
+
+        else:
+
+            return True
+
+    def remove_brand_name(self,dataframe):
+
+        for index, row in dataframe.iterrows():
+
+            brand = row['brand']
+
+            model = row['models']
+
+            check_status = check(model,brand)
+
+            if check_status:
+
+                model = model.replace(str(brand),'')
+
+                dataframe.at[index,'models'] = model
+
+        return dataframe
+
+
     def save_model(self,dataframe):
 
         dataframe.to_csv(self.output_path,index=False)
@@ -75,6 +110,8 @@ class UpdateBrandModel():
 
         all_models = self.concat_brands_models(brand_model)
 
-        save_model = self.save_model(all_models)
+        final_models = self.remove_brand_name(all_models)
+
+        save_model = self.save_model(final_models)
 
         return True

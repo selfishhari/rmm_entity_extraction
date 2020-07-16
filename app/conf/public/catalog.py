@@ -18,3 +18,5 @@ CSV_OUTPUT = "/home/viky/Desktop/freelancer/FLASK/app/conf/public/brand_model.cs
 INTERVAL = "INTERVAL 1 DAY"
 
 DATE_COLUMN = "date"
+
+brand_model_csv = "/home/viky/Desktop/freelancer/Brand Models.csv"

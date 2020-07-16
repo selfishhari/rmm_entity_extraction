@@ -18,7 +18,8 @@ brand_model_sheet = catalog.BRAND_MODEL
 
 alternative_name_sheet = catalog.ALTERNATIVE_NAME
 
-brand_model = pd.read_excel(dataframes, brand_model_sheet)
+#brand_model = pd.read_excel(dataframes, brand_model_sheet)
+brand_model = pd.read_csv(catalog.brand_model_csv)
 
 alternative_name = pd.read_excel(dataframes,alternative_name_sheet)
 
@@ -221,17 +222,28 @@ class MatchUser():
 
         models = []
 
+        x_list = string.split(" ")
+
         for brand in brands:
 
             sub_set_models = self.brand_model.loc[brand_model['brand'] == brand, 'models'].str.lower().unique().tolist()
 
             for model in sub_set_models:
 
-                if self._check(string,str(model)):
+                if (len(str(model)) < 2) | (not _is_strict_alnum(model)) | (len(str(model).split(" ")) < 2):
 
-                    string = string.replace(str(model),'')
+                    for w in x_list:
 
-                    models.append({'brand':brand,'model':model})
+                        if w == model:
+
+                            models.append({'brand':brand,'model':model})
+
+                else:
+                    if self._check(string,str(model)):
+
+                        string = string.replace(str(model),'')
+
+                        models.append({'brand':brand,'model':model})
 
             if any(brand in model for model in models):
 
@@ -303,7 +315,7 @@ class MatchUser():
 
         all_models.extend(extracted_models)
 
-        all_models.extend((self._search_models(altered_string)))
+        #all_models.extend((self._search_models(altered_string)))
 
         extracted_dataframe = pd.DataFrame(all_models)
 
@@ -323,9 +335,11 @@ class MatchUser():
 
         extracted_dataframe['date']= str(trans_date)
 
-        extracted_dataframe = extracted_dataframe[['user_id','date','tag','brand','model']]
+        extracted_dataframe = extracted_dataframe[['user_id','date','tag','brand','model','message_id']]
 
         extracted_dataframe = extracted_dataframe.dropna()
+
+        extracted_dataframe = extracted_dataframe.drop_duplicates()
 
         return extracted_dataframe
 
