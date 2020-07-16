@@ -7,7 +7,7 @@ app = Flask(__name__)
 def hello_world():
    return 'Hello World'
 
-@app.route('/',methods = ['POST','GET'])
+@app.route('/extract',methods = ['POST','GET'])
 def match_user():
    if request.method == "POST":
       input_json = request.get_json()
