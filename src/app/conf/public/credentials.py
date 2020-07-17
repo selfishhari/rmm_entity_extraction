@@ -1,4 +1,4 @@
 
 
-DB_USERNAME = 'root'
-DB_PASSWORD = 'newpass'
+DB_USERNAME = ''
+DB_PASSWORD = ''
