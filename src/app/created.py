@@ -607,6 +607,7 @@ class MatchUser():
             JSON object of matching users ID.
         """
         try:
+            print("1")
             extracted_dataframe = self.extract_brand_model()
 
             #existing_df = self.get_existing_df()
@@ -624,5 +625,6 @@ class MatchUser():
                 user_json = self.get_users_available(available_dataframe,extracted_dataframe)
 
                 return user_json
-        except:
+        except Exception as e:
+            print(str(e))
             return {}
