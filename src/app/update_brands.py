@@ -66,13 +66,13 @@ class UpdateBrandModel():
 
         all_models = all_models.drop_duplicates()
 
-        all_models.dropna()
+        all_models = all_models.dropna()
 
         return all_models
 
-     def check(self,string, sub_str):
+    def check(self,string, sub_str):
 
-        if (string.find(sub_str) == -1):
+        if (str(string).find(str(sub_str)) == -1):
 
             return False
 
@@ -88,14 +88,17 @@ class UpdateBrandModel():
 
             model = row['models']
 
-            check_status = check(model,brand)
+            check_status = self.check(model,brand)
 
             if check_status:
 
                 model = model.replace(str(brand),'')
+                model = model.lstrip()
 
                 dataframe.at[index,'models'] = model
 
+        dataframe = dataframe.dropna()
+        dataframe = dataframe.drop_duplicates()
         return dataframe
 
 

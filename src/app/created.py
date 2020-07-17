@@ -40,6 +40,7 @@ date_column = catalog.DATE_COLUMN
 
 interval = catalog.INTERVAL
 
+iterate_limit = catalog.ITERATE_LIMIT
 
 
 def _is_strict_alnum(x):
@@ -72,6 +73,8 @@ class MatchUser():
         self.ce_table = ce_table
 
         self.INTERVAL = interval
+
+        self.iterate_limit = iterate_limit
 
         self.DATE_COLUMN = date_column
 
@@ -319,6 +322,11 @@ class MatchUser():
 
         extracted_dataframe = pd.DataFrame(all_models)
 
+        if 'brand' not in extracted_dataframe.columns:
+            extracted_dataframe['brand'] = np.nan
+        if 'model' not in extracted_dataframe.columns:
+            extracted_dataframe['model'] = np.nan
+
         extracted_dataframe['user_id']= self.user_id
 
         extracted_dataframe['message_id']= self.message_id
@@ -537,7 +545,9 @@ class MatchUser():
 
         num = 5
 
-        while(available_dataframe.empty)and(num<20):
+        while(available_dataframe.empty)and(num<self.iterate_limit):
+
+            print(num)
 
             pincodes_tuple = self._generate_pincodes(pincode,num)
 
@@ -547,7 +557,18 @@ class MatchUser():
 
             available_dataframe = self._dataframe_available(matching_users)
 
-            num += 1
+            if num == 5:
+
+                num = 100
+
+            elif num == 100:
+
+                num = 1000
+
+            else:
+
+                num += 1000
+
         return available_dataframe
 
 
@@ -567,7 +588,8 @@ class MatchUser():
         user_dict = {}
 
         for i in range(len(set(matched_users))):
-            user_dict[i] = matched_users[i]
+            if matched_users[i]!=self.user_id:
+                user_dict[i] = matched_users[i]
 
         return json.dumps(user_dict)
 
@@ -584,21 +606,23 @@ class MatchUser():
         returns:
             JSON object of matching users ID.
         """
+        try:
+            extracted_dataframe = self.extract_brand_model()
 
-        extracted_dataframe = self.extract_brand_model()
+            #existing_df = self.get_existing_df()
 
-        #existing_df = self.get_existing_df()
+            #upload_df_final = self.get_upload_final_df(existing_df,extracted_dataframe)
 
-        #upload_df_final = self.get_upload_final_df(existing_df,extracted_dataframe)
+            upload_status = self.uploaded_dateframe(extracted_dataframe)
 
-        upload_status = self.uploaded_dateframe(extracted_dataframe)
+            pincode = self.get_pincode()
 
-        pincode = self.get_pincode()
+            if upload_status:
 
-        if upload_status:
+                available_dataframe = self.available_user_with_model(pincode)
 
-            available_dataframe = self.available_user_with_model(pincode)
+                user_json = self.get_users_available(available_dataframe,extracted_dataframe)
 
-            user_json = self.get_users_available(available_dataframe,extracted_dataframe)
-
-            return user_json
+                return user_json
+        except:
+            return {}

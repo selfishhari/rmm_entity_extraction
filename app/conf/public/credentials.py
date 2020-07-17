@@ -1,4 +1,0 @@
-
-
-DB_USERNAME = ''
-DB_PASSWORD = ''

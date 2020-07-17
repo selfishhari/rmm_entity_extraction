@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 @app.route('/match')
 def hello_world():
-   return 'RMM EXTRACTION TEST'
+   return 'RMM EXTRACTION'
 
 @app.route('/extract',methods = ['POST','GET'])
 def match_user():
