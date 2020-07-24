@@ -6,9 +6,10 @@ import pandas as pd
 import numpy as np
 from datetime import date
 import string
+import operator
 import sqlalchemy
 from conf.public import catalog, credentials
-
+from fuzz_match import SpellCheck
 
 excel_sheet_loc = catalog.EXCEL_SHEET
 
@@ -21,8 +22,10 @@ alternative_name_sheet = catalog.ALTERNATIVE_NAME
 #brand_model = pd.read_excel(dataframes, brand_model_sheet)
 brand_model = pd.read_csv(catalog.brand_model_csv)
 
-alternative_name = pd.read_excel(dataframes,alternative_name_sheet)
+#alternative_name = pd.read_excel(dataframes,alternative_name_sheet)
+alternative_name = pd.read_csv(catalog.alternative_name_csv)
 
+brand_rank = pd.read_csv(catalog.brand_rank_csv)
 
 host = catalog.DB_HOST
 
@@ -66,6 +69,8 @@ class MatchUser():
 
         self.brand_model = brand_model
 
+        self.brand_rank = brand_rank
+
         self.input_object = input_object
 
         self.shop_table = shop_table
@@ -106,7 +111,7 @@ class MatchUser():
 
         string_1 = string_1.lower()
 
-        string_1= string_1.replace("\n", " ")
+        string_1 = string_1.replace("\n", " ")
 
         string_1 = string_1.translate ({ord(c): " " for c in "!@#$%^&*()[]{};:,./<>?\|`~=_"})
 
@@ -140,6 +145,7 @@ class MatchUser():
             1. Brand List
         """
 
+        #exact search
         items = []
 
         for item in items_list:
@@ -159,6 +165,7 @@ class MatchUser():
 
                     items += [item]
 
+        #searching for alternative brand names
         alt_names = self._search_alt_brand_name(x_list)
 
         items.extend(alt_names)
@@ -185,12 +192,14 @@ class MatchUser():
 
         alternative_name_copy = self.alternative_name.copy()   #-------conf
 
-        alternative_name_copy['alt'] = alternative_name_copy['alt'].apply(lambda x: str(x).split(","))
+        #converting alternative brand name column to list
+        alternative_name_copy['alt'] = alternative_name_copy['alt'].apply(lambda x: str(x).split(", "))
 
         alt_name = alternative_name_copy.set_index('brand')['alt'].to_dict()
 
         brand_name = []
 
+        #checking if alternative name exists
         for item in x_list:
 
             for key, value in alt_name.items():
@@ -207,7 +216,7 @@ class MatchUser():
         Returns: Boolean
         """
 
-        if (string.find(sub_str) == -1):
+        if (str(string).find(str(sub_str)) == -1):
 
             return False
 
@@ -225,25 +234,33 @@ class MatchUser():
 
         models = []
 
+        #splitting the input string
         x_list = string.split(" ")
 
         for brand in brands:
 
+            #getting mmodels based on brand
             sub_set_models = self.brand_model.loc[brand_model['brand'] == brand, 'models'].str.lower().unique().tolist()
 
             for model in sub_set_models:
 
                 if (len(str(model)) < 2) | (not _is_strict_alnum(model)) | (len(str(model).split(" ")) < 2):
 
+                    #exact match
                     for w in x_list:
 
                         if w == model:
 
+                            #removing brand name from string
+                            string = string.replace(str(model),'')
+
                             models.append({'brand':brand,'model':model})
 
                 else:
+                    #substring match
                     if self._check(string,str(model)):
 
+                        #removing brand name from string
                         string = string.replace(str(model),'')
 
                         models.append({'brand':brand,'model':model})
@@ -256,7 +273,32 @@ class MatchUser():
 
                 models.append({'brand':brand,'model':None})
 
+
         return models, string
+
+    def _get_brand_rank(self,brand_list):
+
+        sort_value = {}
+
+        for brand in brand_list:
+
+            rank = self.brand_rank.loc[self.brand_rank['brand'] == brand, 'brand_rank']
+
+            if rank.any():
+
+                rank = rank.iloc[0]
+
+            else:
+
+                rank = 1000
+
+            sort_value[brand]=rank
+
+        print(sort_value)
+
+        most_popular = min(sort_value,key=sort_value.get)
+
+        return most_popular
 
     def _search_models(self,string,rem_num_only = True):
         """To search models from excel from the input string
@@ -265,6 +307,7 @@ class MatchUser():
             1. Models extracted Dataframe
         """
 
+        #extracting all the models
         all_models = self.brand_model['models'].str.lower().unique().tolist()
 
         models= []
@@ -273,35 +316,39 @@ class MatchUser():
 
             for item in all_models:
 
+                #removing digits
                 if str(item).isdigit():
 
                     all_models.remove(item)
 
+        #splitting the altered string
         x_list = string.split(" ")
 
         for model in all_models:
 
             if (len(str(model)) < 2) | (not _is_strict_alnum(model)) | (len(str(model).split(" ")) < 2):
 
+                #exact match
                 for w in x_list:
 
                     if w == model:
 
                         brands = self.brand_model.loc[brand_model['models'] == model, 'brand']
 
-                        for brand in brands:
+                        popular_brand = self._get_brand_rank(brands)
 
-                            models.append({'brand':brand,'model':model})
+                        models.append({'brand':popular_brand,'model':model})
 
             else:
 
                 if self._check(string,str(model)):
 
+                    #substring match
                     brands = self.brand_model.loc[brand_model['models'] == model, 'brand']
 
-                    for brand in brands:
+                    popular_brand = self._get_brand_rank(brands)
 
-                        models.append({'brand':brand,'model':model})
+                    models.append({'brand':popular_brand,'model':model})
 
         return models
 
@@ -314,11 +361,13 @@ class MatchUser():
 
         all_models = []
 
+        #extracting models based on brands
         extracted_models, altered_string = (self._search_models_based_on_brand(string,brands))
 
         all_models.extend(extracted_models)
 
-        #all_models.extend((self._search_models(altered_string)))
+        #extracting models based on substrings
+        all_models.extend((self._search_models(altered_string)))
 
         extracted_dataframe = pd.DataFrame(all_models)
 
@@ -327,6 +376,25 @@ class MatchUser():
         if 'model' not in extracted_dataframe.columns:
             extracted_dataframe['model'] = np.nan
 
+        if extracted_dataframe.empty:
+            #Doing direct fuzz match
+            words = self.brand_model['brand'].str.lower().unique().tolist()
+
+            spell_check = SpellCheck(words)
+
+            spell_check.check(string)
+
+            matching_word = spell_check.suggestions()
+            print("2")
+            #if there is a match, dataframe of matched string is formed
+            if len(matching_word) > 0:
+
+                df_matching = pd.DataFrame(matching_word)
+                print("3")
+                print(matching_word)
+                extracted_dataframe = pd.concat([extracted_dataframe,df_matching])
+                print(extracted_dataframe)
+        #creating dataframe
         extracted_dataframe['user_id']= self.user_id
 
         extracted_dataframe['message_id']= self.message_id
@@ -345,11 +413,38 @@ class MatchUser():
 
         extracted_dataframe = extracted_dataframe[['user_id','date','tag','brand','model','message_id']]
 
-        extracted_dataframe = extracted_dataframe.dropna()
-
+        #Dropping duplicates
         extracted_dataframe = extracted_dataframe.drop_duplicates()
 
+        print(extracted_dataframe)
+
         return extracted_dataframe
+
+    def remove_brand_name(self,dataframe):
+
+        for index, row in dataframe.iterrows():
+
+            brand = row['brand']
+
+            model = row['model']
+
+            #checking for none value
+            if brand is not None and model is not None:
+                check_status = self._check(model,brand)
+
+                if check_status:
+
+                    # replacing brand name in models with space
+                    model = model.replace(str(brand),'')
+
+                    #removing unwantes spaces
+                    model = model.lstrip()
+
+                    dataframe.at[index,'model'] = model
+
+        dataframe = dataframe.drop_duplicates()
+
+        return dataframe
 
     def extract_brand_model(self):
         """To Extract brand and model from the text
@@ -357,16 +452,23 @@ class MatchUser():
         Returns: dataframe
             1. Models and brand extracted Dataframe
         """
-
+        #preprocessing the text
         preprocessed_text = self.pre_processing()
 
+        #Forming tokens
         tokens = self._stop_words_removal(preprocessed_text)
 
+        #Getting all brand names from dataframe
         all_brands = self.brand_model['brand'].str.lower().unique().tolist()
 
+        #Extracting matching brand name
         brands_list = self._search_brands(all_brands,tokens)
 
+        #Extracting models
         extracted_dataframe = self.extract_models(preprocessed_text,brands_list)
+
+        #Removing brand names from models
+        extracted_dataframe = self.remove_brand_name(extracted_dataframe)
 
         return extracted_dataframe
 
@@ -393,11 +495,12 @@ class MatchUser():
         """
         pincodes = []
 
+        #negative range of pincode
         for i in range(pincode-num,pincode):
 
             pincodes.append(i)
 
-
+        #positive range of pincode
         for j in range(pincode,pincode+num):
 
             pincodes.append(j)
@@ -418,6 +521,11 @@ class MatchUser():
 
         user_id_list = [r[0] for r in user_id_result]
 
+        #removing the user id of the customer
+        user_id_list.remove(self.user_id)
+
+        print(user_id_list)
+
         return user_id_list
 
 
@@ -430,6 +538,7 @@ class MatchUser():
             1. Models and brands with userId
         """
 
+        #initializing extract tag
         if self.tag =='sell':
 
             tag = 'buy'
@@ -438,36 +547,23 @@ class MatchUser():
 
             tag = 'sell'
 
-        if len(user_id_list)>1:
+        if len(user_id_list)>0:
 
-            extracted_model_query = "SELECT * from {} WHERE user_id IN {} AND tag = '{}' AND {}>DATE_SUB(now(), {});".format(self.ce_table,
-                                                        tuple(user_id_list),tag,self.DATE_COLUMN,self.INTERVAL)
+            if len(user_id_list)>1:
 
-        elif len(user_id_list)==1:
+                extracted_model_query = "SELECT * from {} WHERE user_id IN {} AND tag = '{}' AND {}>DATE_SUB(now(), {});".format(self.ce_table,
+                                                            tuple(user_id_list),tag,self.DATE_COLUMN,self.INTERVAL)
 
-            extracted_model_query = "SELECT * from {} WHERE user_id = {} AND tag = '{}' AND {}>DATE_SUB(now(), {});".format(self.ce_table,
-                                                                        user_id_list[0],tag,self.DATE_COLUMN,self.INTERVAL)
+            elif len(user_id_list)==1:
 
-        available_models = pd.read_sql_query(extracted_model_query,self.db_engine)
+                extracted_model_query = "SELECT * from {} WHERE user_id = {} AND tag = '{}' AND {}>DATE_SUB(now(), {});".format(self.ce_table,
+                                                                            user_id_list[0],tag,self.DATE_COLUMN,self.INTERVAL)
+
+            available_models = pd.read_sql_query(extracted_model_query,self.db_engine)
+        else:
+            available_models = pd.DataFrame()
 
         return available_models
-
-
-
-    # def get_existing_df(self):
-
-    #     """Get the existing table from the database to be updated
-
-    #     Returns: Dataframe
-    #         1. Models and brands
-    #     """
-
-    #     existing_df_query = "SELECT * FROM {};".format(self.ce_table) #----table names in catalog
-
-    #     existing_df = pd.read_sql_query(existing_df_query,self.db_engine)
-
-    #     return existing_df
-
 
 
     def uploaded_dateframe(self,dataframe):
@@ -498,40 +594,32 @@ class MatchUser():
         Returns: List
             1. Final Users
         """
+        #chnaging dtype of columns
+        extracted_dataframe['brand'] = extracted_dataframe[['brand']].astype(str)
 
+        extracted_dataframe['model'] = extracted_dataframe[['model']].astype(str)
+
+        available_models['brand'] = available_models[['brand']].astype(str)
+
+        available_models['model'] = available_models[['model']].astype(str)
+
+        # Merging on both models and brands
         final_df = pd.merge(extracted_dataframe, available_models, on=['brand','model'], how='inner')
 
         if final_df.empty:
 
+            # If the dataframe is empty, then merging on brand
+
             final_df = pd.merge(extracted_dataframe, available_models, on=['brand'], how='inner')
 
+            # Still, if its empty merging, returning all
             if final_df.empty:
 
                 final_df = available_models
 
-        final_list = final_df['user_id'].tolist()
+        final_list = final_df['message_id'].tolist()
 
         return final_list
-
-
-
-    # def get_upload_final_df(self,existing_df,extracted_dataframe):
-    #     """Get dataframe to be updated in the database
-
-    #     Returns: Dataframe
-    #         1. Models and brands with userId
-    #     """
-
-    #     if existing_df.empty:
-    #         upload_df_final = extracted_dataframe
-
-    #     else:
-    #         upload_df = pd.concat([existing_df,extracted_dataframe])
-
-    #         upload_df_final = upload_df.drop_duplicates()
-
-    #     return upload_df_final
-
 
 
 
@@ -545,18 +633,21 @@ class MatchUser():
 
         num = 5
 
+        #Iterating till there is no empty datadframe
         while(available_dataframe.empty)and(num<self.iterate_limit):
 
-            print(num)
+            #getting pincodes
 
             pincodes_tuple = self._generate_pincodes(pincode,num)
 
+            #Identifying matching users available in the pincodes
             matching_users = self.get_matching_user(pincodes_tuple)
 
             matching_users = list(set(matching_users))
 
             available_dataframe = self._dataframe_available(matching_users)
 
+            #increasing number of pincodes to form
             if num == 5:
 
                 num = 100
@@ -568,6 +659,7 @@ class MatchUser():
             else:
 
                 num += 1000
+
 
         return available_dataframe
 
@@ -583,13 +675,13 @@ class MatchUser():
 
         extracted_brand_model_df = extracted_dataframe[['brand','model']]
 
+        #extracting final set of user matching our requirements
         matched_users = self.get_users(extracted_brand_model_df,available_dataframe)
 
         user_dict = {}
 
         for i in range(len(set(matched_users))):
-            if matched_users[i]!=self.user_id:
-                user_dict[i] = matched_users[i]
+            user_dict[i] = matched_users[i]
 
         return json.dumps(user_dict)
 
@@ -607,12 +699,7 @@ class MatchUser():
             JSON object of matching users ID.
         """
         try:
-            print("1")
             extracted_dataframe = self.extract_brand_model()
-
-            #existing_df = self.get_existing_df()
-
-            #upload_df_final = self.get_upload_final_df(existing_df,extracted_dataframe)
 
             upload_status = self.uploaded_dateframe(extracted_dataframe)
 
@@ -625,6 +712,8 @@ class MatchUser():
                 user_json = self.get_users_available(available_dataframe,extracted_dataframe)
 
                 return user_json
+
         except Exception as e:
             print(str(e))
+
             return {}

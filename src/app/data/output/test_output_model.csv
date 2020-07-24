@@ -1,0 +1,87 @@
+question ,brand ,model ,model_pred,accuracy
+note 8 mi account bypass krona h,xiaomi,['note 8'],['note 8'],1.0
+help me for unlock accout redmi 7a miui 11,xiaomi,['7a'],"['7a', '11']",0.5
+koi ufi master hai isme kya programing karna padega phone dead condition me he redmi note 5 pro,xiaomi,"['note 5', 'note 5 pro', '5 pro']","['5', 'pro', 'phone', 'note 5']",0.25
+oppo a5s unlock,oppo,['a5s'],['a5s'],1.0
+vivo u20 unlock solution,vivo,['u20'],['u20'],1.0
+redmi 8a unlock online or normal,xiaomi,['8a'],['8a'],1.0
+vivo y95 restarting solution battery changed same condition,vivo,['y95'],['y95'],1.0
+samsung sm a710fd 7 1 frp bypass no 7 1,samsung,['a710fd'],"['a710fd', '1']",0.5
+mi note 5 pro flashing karna hai without credit,xiaomi,"['note 5', '5 pro']","['5', 'pro', 'note 5']",0.3333333333333333
+mi 5a radio off problem aa rahi koi solution ha kya bahiyo,xiaomi,"['5', '5a']",['5a'],0.5
+vivo v9 1723 andriod 9 new security not formet on umt,vivo,['v9'],"['v9', '1723', '9']",0.3333333333333333
+vivo y91i ka pattern lock solution box nahi hai,vivo,['y91i'],['y91i'],1.0
+vivo y71 adb enabled code,vivo,['y71'],['y71'],1.0
+again oppo a83 chp1827 unlocking done,oppo,['a83'],['a83'],1.0
+mi 6 pro mi 6 pro,xiaomi,"['6', '6 pro']","['pro', '6']",0.5
+vivo s1 pro only password unlock without deta loss please help,vivo,['s1'],"['s1 pro', 's1']",0.5
+honor 7x frp kayse nikalen bhai,honor,['7x'],['7x'],1.0
+need samsung g611ff efs file,samsung,['g611ff'],['g611ff'],1.0
+vivo y12 pin and frp unlock kisme hoga umt or cm2,vivo,['y12'],['y12'],1.0
+oppo a57 soft brick how to repair it,oppo,['a57'],['a57'],1.0
+hello sir samsung j2 18 m usb work nhi kar rahi h kya ufi s isp s flash ho sakta h phone on h aur update k baad touch not working but sir ufi m file select kaise hogy and isp pinout need,samsung,['j2'],"['flash', 'touch', 'phone', 'j2']",0.25
+samsung galaxy a70s frp umt or z3x,samsung,['galaxy a7'],"['galaxy', 'a70s', 'galaxy a7']",0.3333333333333333
+how to falsh samsung j2,samsung,['j2'],['j2'],1.0
+unlock zte blade l130,zte,['blade'],['blade'],1.0
+lenovo k4 note light problem boast voltage 30 v ban raha hai but light nahi aa rahi hai,lenovo,['k4'],['k4'],1.0
+samsung i9060 kya karana parega sir,samsung,['i9060'],['i9060'],1.0
+samsung j6 mdm and download mode error,samsung,['j6'],['j6'],1.0
+samsung guru 1200 phone password unlocke,samsung,['1200'],"['1200', 'phone']",0.5
+please how can i remove gn sales tracker on gionee s10 lite,gionee,['s10'],['s10'],1.0
+redmi 6 unlock,xiaomi,['xiaomi 6'],['6'],0.0
+oppo a5s pattern unlock,oppo,['a5s'],['a5s'],1.0
+mi 6a mi account price,xiaomi,"['6a', '6']",['6a'],0.5
+vivo v11 tested file link plz which tool is use to flash vivo v11,vivo,['v11'],"['flash', 'link', 'v11']",0.3333333333333333
+hey how to root oppo a57 please help hey any body know the answer for this question help me how to root oppo a57 i want twrp recovery for oppoa57 arre bhai please help,oppo,['a57'],['a57'],1.0
+mi note 6 pro unlock password without loss data any solution,xiaomi,['note 6'],"['6', 'pro', 'note 6']",0.3333333333333333
+oppo a5 unlock,oppo,['a5'],"['a5', 'a5 ']",0.5
+k20 mi account,xiaomi,['k20'],['k20'],1.0
+oppo a3s hang on logo koi krega flash,oppo,['a3s'],"['flash', 'a3s ', 'a3s']",0.3333333333333333
+kisi ke redmi 7 ka network security file h kya ok,xiaomi,['7'],['7'],1.0
+oppo f11 mrt se hoga kya 1911,oppo,['f11'],"['f11', 'a 1', '1911']",0.3333333333333333
+ye ic nikli hue h samsung j2 se aur on nhi ho rha h kya krna pdega ic dalni pdegi ya jupmer se v koe solution h eska aur is ic ka name kya h please help me,samsung,['j2'],['j2'],1.0
+samsung cor 2frp,samsung,['core 2'],[],0.0
+vivo u10 unlock hoga sir kya price hai,vivo,['u10'],['u10'],1.0
+oppo a5 2020 lock,oppo,['a5'],"['a5', 'a5 2020']",0.5
+mujhey apna oneplus 3 ka screen glass repair karwana hai,oneplus,['3'],['3'],1.0
+vivo y90 flastool or flash fir link plz,vivo,['y90'],"['y90', 'flash', 'link']",0.3333333333333333
+redmi note 5 pro rear camera problem,xiaomi,"['note 5', 'note 5 pro', '5 pro']","['5', 'pro', 'note 5']",0.3333333333333333
+honor 9n flash file flashing by mrt pls help me sir problem stuck on logo thanks sir but conform kaise kero kitne gb wala phone hai 3 32 gb 4 64 gb 4 28 seb mai ue file mar sekta hoo,honor,['9n'],"['phone', '3', '9n', 'flash', '4']",0.2
+oppo a5 pattern remove help anyone plz,oppo,['a5'],"['a5', 'a5 ']",0.5
+realme c1 screen lock,realme,['c1'],['c1'],1.0
+samsung a10 frp,samsung,['a10'],['a10'],1.0
+oppo on hai khy kisi ka price ok oppo cph1931 flash file,oppo,['cph1931'],"['cph1931', 'flash']",0.5
+gionee f205 pro frp file only 5 mb resat frp mtk 6739 ðŸ—ï¸ðŸ—ï¸ðŸ—ï¸,gionee,['5 pro'],['f205 pro'],0.0
+mi 6 mi ac hatana he price kiya he,xiaomi,['6'],['6'],1.0
+lenovo k8plus frp version 7 2 0 help,lenovo,['k8 plus'],[],0.0
+oppo a71 restart problem fs failed,oppo,['a71'],['a71'],1.0
+iphone 5s chalu nhi jo rha hy only apple likha hua aata hey who bhi charging mei pls solution idia,apple,"['iphone 5s', 'iphone 5', '5s']","['iphone 5s', '5s']",0.6666666666666666
+how to realme 3 pro frp help plz,realme,['3 pro'],"['3', '3 pro']",0.5
+bhai koi vivo u10 fro lock nikalsakthahe,vivo,['u10'],['u10'],1.0
+cost of realme x flashing,realme,['x'],['x'],1.0
+redmi y2 flashing ather dad nahi links ho to send kr do,xiaomi,['y21l'],['y2'],0.0
+samsung g610f set off hai dps se 14amp curent le rha hai on off swich press kare par koi halchal nhi kar rha hai,samsung,['g610f'],['g610f'],1.0
+realme 1 stuck on logo,realme,['1'],['1'],1.0
+nokia ram 840 model 301 1 how to remove password,nokia,['301 1'],"['840', 'ram', '1', '301 1', '301']",0.2
+honor 7a frp,honor,['7a'],['7a'],1.0
+oppo a71 isp pin,oppo,['a71'],['a71'],1.0
+mi 2016037 flashfile send me,xiaomi,['2'],[],0.0
+please help samsung j7 prime ear speaker jumper way s,samsung,['prime'],"['j7', 'prime']",0.5
+lephone w7 qgdp tool me scan port karne par port nahin dikhata spd driver hai aur coolpad driver v install kar liya device manager me spd port dikhata hai par software catch nahin karta hai kya karun guys kya solution hai iska,coolpad,['w7'],['w7'],1.0
+oppo a71,oppo,['a71'],['a71'],1.0
+bhai ram 8gb hai pd1832f hai vivo 1818 modeal hai plzz isp pinout kisi ko pata hai share kare plzzz,vivo,['pd1832f'],"['pd1832f', 'ram', '1818']",0.3333333333333333
+oppo f9 cph 1911 pattern locj,oppo,['f9 cph1911'],"['f9', '1911']",0.0
+sm a750f samsung a7 2018 frp solution android 9,samsung,['a7'],"['a750f', 'a7', '9']",0.3333333333333333
+bhai mi 5a dead any solution,xiaomi,"['5', '5a']",['5a'],0.5
+vivo y93 mtk cpu remove pattern with loss data any solution,vivo,['y93'],['y93'],1.0
+samsung e2255 mobile hai charge prr laga raha hoon on ho raha hai fir logo dikha krr off ho ja raha hai,samsung,['e2255'],['e2255'],1.0
+vivo v15 pro frp kaise hatega,vivo,"['5 pro', 'v15', 'v15 pro']","['v1', 'v15', '5 pro']",0.6666666666666666
+redmi mia1 how to solution,xiaomi,['a 1'],[],0.0
+oppo Ã 1k service on hai kya,oppo,['a1k'],[],0.0
+vivo z1pro pattron kisi k paas h online ya offline,vivo,['z1pro'],['z1pro'],1.0
+realme 3 screen unlocklock krne hey,realme,['3'],['3'],1.0
+vivo y12 how to unlock,vivo,['y12'],['y12'],1.0
+samsung j400f volte not show please help,samsung,['j400f'],['j400f'],1.0
+vivo v17 pro pin lock hai kaise unlock kru,vivo,['7 pro'],"['v17', 'v17 pro']",0.0
+mi 6 account problem,xiaomi,['6'],['6'],1.0
+vivo u10 unlock mrt umt cm2,vivo,['u10'],['u10'],1.0
