@@ -2,8 +2,10 @@ import pandas as pd
 import numpy as np
 from pandas import Series, DataFrame
 import datetime
+import sys
+sys.path.append("/home/ec2-user/rmm_entity_extraction")
 from conf.public import catalog, credentials
-from fuzz_match import SpellCheck
+from src.extractor.fuzz_match import FuzzySearch
 
 excel_sheet_loc = catalog.EXCEL_SHEET
 
@@ -44,7 +46,7 @@ class UpdateAlternativeName():
 
             string = (row['question '])
 
-            spell_check = SpellCheck(words)
+            spell_check = FuzzySearch(words)
 
             spell_check.check(string)
 
@@ -146,3 +148,7 @@ class UpdateAlternativeName():
         self.save_model(concat_old)
 
         return True
+
+if __name__ == "__main__":
+    update_alternative = UpdateAlternativeName()
+    update_alternative.update()

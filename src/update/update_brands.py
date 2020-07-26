@@ -2,6 +2,9 @@ import pandas as pd
 import numpy as np
 from pandas import Series, DataFrame
 import datetime
+import sys
+sys.path.append("/home/ec2-user/rmm_entity_extraction")
+
 from conf.public import catalog, credentials
 
 excel_sheet_loc = catalog.EXCEL_SHEET
@@ -101,3 +104,8 @@ class UpdateBrandModel():
         save_model = self.save_model(all_models)
 
         return True
+
+
+if __name__ == "__main__":
+    update_brand = UpdateBrandModel()
+    update_brand.update()

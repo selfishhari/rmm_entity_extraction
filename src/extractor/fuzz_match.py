@@ -1,10 +1,16 @@
 from fuzzywuzzy import fuzz
+import sys, os
+
+sys.path.append("/home/ec2-user/rmm_entity_extraction")
+from conf.public import catalog
+
 
 # spellcheck main class
-class SpellCheck:
+class FuzzySearch:
 
     # initialization method
     def __init__(self, word_list):
+        self.catalog = vars(catalog)
         # open the dictionary file
         self.data = word_list
 
@@ -36,8 +42,8 @@ class SpellCheck:
             # loop over words in the dictionary
             for name in self.dictionary:
 
-                # if the fuzzywuzzy returns the matched value greater than 80
-                if fuzz.ratio(string_words[i].lower(), name.lower()) >= 75:
+                # if the fuzzywuzzy returns the matched value greater than limit
+                if fuzz.ratio(string_words[i].lower(), name.lower()) >= self.catalog['FUZZ_PERCENT']:
 
                     if string_words[i].lower() != name.lower():
 
@@ -72,8 +78,8 @@ class SpellCheck:
                 # calulcate the match probability
                 percent = fuzz.ratio(string_words[i].lower(), name.lower())
 
-                # if the fuzzywuzzy returns the matched value greater than 80
-                if percent >= 75:
+                # if the fuzzywuzzy returns the matched value greater than limit
+                if percent >= self.catalog['FUZZ_PERCENT']:
 
                     # if the matched probability is
                     if percent > max_percent:

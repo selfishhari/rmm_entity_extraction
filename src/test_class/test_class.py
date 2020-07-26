@@ -1,6 +1,9 @@
 import pandas as pd
-from created import MatchUser
-from conf.public import catalog
+import sys
+sys.path.append("/home/ec2-user/rmm_entity_extraction")
+from src.extractor.entity_extractor import MatchUser
+from conf.public import catalog, credentials
+
 
 test_brand_output = catalog.TEST_OUTPUT_BRAND_CSV
 
@@ -8,6 +11,11 @@ test_model_output = catalog.TEST_OUTPUT_MODEL_CSV
 
 class AccuracyMeasure():
     def __init__(self,test_set_brand,test_set_model):
+
+        self.catalog = catalog
+
+        self.credentials = credentials
+
         self.test_set_brand = test_set_brand
 
         self.test_set_model = test_set_model
@@ -26,6 +34,9 @@ class AccuracyMeasure():
         return True
 
     def accuracy_score_models(self,y_true,y_pred):
+        """y_true and y_pred is a list consisting of model names
+        y_true = ['note','pro', 'j7']
+        y_pred = ['note','pro'] """
         accuracy_score = 0
 
         #iterating over lists
@@ -111,9 +122,11 @@ class AccuracyMeasure():
             input_object = {'id':1,'text':question,'tag':'buy','user_id':543,'message_id':6}
 
             #predicting brands and model
-            match_user = MatchUser(input_object)
+            match_user = MatchUser(self.catalog,self.credentials,input_object)
 
-            df = match_user.extract_brand_model()
+            preprocessed_text = match_user.pre_processing(match_user.text)
+
+            df = match_user.extract_brand_model(preprocessed_text)
 
             #assigning models as list value to model_pred
             models = df['model'].tolist()
@@ -159,9 +172,11 @@ class AccuracyMeasure():
             input_object = {'id':1,'text':question,'tag':'buy','user_id':543,'message_id':6}
 
             #predicting brands and model
-            match_user = MatchUser(input_object)
+            match_user = MatchUser(self.catalog,self.credentials,input_object)
 
-            df = match_user.extract_brand_model()
+            preprocessed_text = match_user.pre_processing(match_user.text)
+
+            df = match_user.extract_brand_model(preprocessed_text)
 
             #assigning brand as list value to brand_pred
             brands = df['brand'].tolist()

@@ -2,8 +2,12 @@ import pandas as pd
 import numpy as np
 from pandas import Series, DataFrame
 import datetime
+import sys
+sys.path.append("/home/ec2-user/rmm_entity_extraction")
+
+from src.extractor.fuzz_match import FuzzySearch
 from conf.public import catalog, credentials
-from fuzz_match import SpellCheck
+
 
 excel_sheet_loc = catalog.EXCEL_SHEET
 
@@ -70,3 +74,7 @@ class UpdateBrandRank():
         self.save_model(brand_counts)
 
         return True
+
+if __name__ == "__main__":
+    brand_rank = UpdateBrandRank()
+    brand_rank.update()
