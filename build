@@ -1,0 +1,45 @@
+#Scripts to build and deploy RMM application
+
+sudo yum update -y
+sudo yum install git -y
+git clone -b vignesh --single-branch https://github.com/selfishhari/rmm_entity_extraction.git
+
+########### install mysql
+
+sudo yum install mysql-server -y
+sudo chkconfig mysqld on
+sudo service mysqld start
+
+########## Setting up python with anaconda
+
+wget https://anaconda.org/anaconda-adam/adam-installer/4.4.0/download/adam-installer-4.4.0-Linux-x86_64.sh
+
+bash adam-installer-4.4.0-Linux-x86_64.sh -b -p ~/adam
+
+echo -e '\n# Anaconda Adam\nexport PATH=~/adam/bin:$PATH' >> ~/.bashrc
+
+conda create -n rmm_deploy python=3.6
+
+conda activate rmm_deploy
+
+sudo yum install -y mysql-devel
+
+sudo yum install python-devel
+
+sudo yum -y install gcc
+
+pip install -U -r requirements.txt 
+
+export rmm_db_username='USERNAME'
+
+export rmm_db_password='PASSWORD'
+
+sudo yum install tmux
+
+# deployment
+tmux new -s api
+
+conda activate rmm_deploy
+
+python rmm_entity_extraction/app.py
+

@@ -31,7 +31,7 @@ DB_HOST = "localhost"
 
 DB_NAME = "rmm_entity"
 
-INTERVAL = "INTERVAL 1 DAY"
+INTERVAL = "INTERVAL 1 DAY" #Time Interval for extract query
 
 SHOP_TABLE = "shops"
 
@@ -59,6 +59,8 @@ TEST_SET_MODELS = "/home/ec2-user/rmm_entity_extraction/data_rmm/Inputs/test_set
 
 #--------parameters------------
 
-FUZZ_PERCENT = 75
+FUZZ_PERCENT = 75   #Matching percent
 
-ITERATE_LIMIT = 20000
+ITERATE_LIMIT = 20000 #Iterate limit for pincode
+
+ITERATE_LIMIT_KMS = 45 # Iterate limit for lat long matching

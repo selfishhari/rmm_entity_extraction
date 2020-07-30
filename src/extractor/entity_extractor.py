@@ -9,7 +9,7 @@ import string
 import operator
 import sqlalchemy
 import sys
-sys.path.append("/home/ec2-user/rmm_entity_extraction")
+from src.database_utils.database_config import DataBaseEngine
 from src.extractor.fuzz_match import FuzzySearch
 
 
@@ -33,35 +33,16 @@ def _is_strict_alnum(x):
 
 class MatchUser():
 
-    def __init__(self,catalog,credentials,input_object):
+    def __init__(self,catalog,credentials):
         try:
-            self.input_object = input_object
 
             self.catalog = vars(catalog)
 
             self.credentials = vars(credentials)
 
-            self.tag = self.input_object['tag']
+            db_config = DataBaseEngine(self.catalog,self.credentials)
 
-            self.user_id = self.input_object['id']
-
-            self.text = self.input_object['text']
-
-            self.message_id = self.input_object['message_id']
-
-            self.user_name = self.credentials['DB_USERNAME']
-
-            self.password = self.credentials['DB_PASSWORD']
-
-            self.host = self.catalog['DB_HOST']
-
-            self.db_name =self.catalog['DB_NAME']
-
-            self.db_engine = sqlalchemy.create_engine(
-                'mysql+pymysql://{0}:{1}@{2}/{3}?charset=utf8mb4'.format(self.user_name,
-                                                self.password,
-                                                self.host,
-                                                self.db_name))
+            self.db_engine = db_config.config_engine()
 
             self.alternative_name = pd.read_csv(self.catalog['alternative_name_csv'])
 
@@ -79,6 +60,7 @@ class MatchUser():
 
             self.DATE_COLUMN = self.catalog['DATE_COLUMN']
 
+            print("Done")
         except Exception as e:
             print("Constructor class")
             print(str(e))
@@ -230,7 +212,7 @@ class MatchUser():
 
             for model in sub_set_models:
 
-                # Doing exact match if length of model is less than 2 or model is strictly a digit(numeric)
+                # Doing exact match if length of model is less than 2 or model is strictly a digit(numeric) and string is a single word
                 if (len(str(model)) < 2) | (not _is_strict_alnum(model)) | (len(str(model).split(" ")) < 2):
 
                     #exact match
@@ -632,7 +614,7 @@ class MatchUser():
         Returns: List
             1. Final Users
         """
-        #chnaging dtype of columns
+        #changing dtype of columns
         extracted_dataframe['brand'] = extracted_dataframe[['brand']].astype(str)
 
         extracted_dataframe['model'] = extracted_dataframe[['model']].astype(str)
@@ -641,19 +623,15 @@ class MatchUser():
 
         available_models['model'] = available_models[['model']].astype(str)
 
-        # Merging on both models and brands
-        final_df = pd.merge(extracted_dataframe, available_models, on=['brand','model'], how='inner')
 
+        # If the dataframe is empty, then merging on brand
+
+        final_df = pd.merge(extracted_dataframe, available_models, on=['brand'], how='inner')
+
+        # Still, if its empty merging, returning all
         if final_df.empty:
 
-            # If the dataframe is empty, then merging on brand
-
-            final_df = pd.merge(extracted_dataframe, available_models, on=['brand'], how='inner')
-
-            # Still, if its empty merging, returning all
-            if final_df.empty:
-
-                final_df = available_models
+            final_df = available_models
 
         final_list = final_df['user_id'].tolist()
 
@@ -778,7 +756,18 @@ class MatchUser():
         return json.dumps(message_id_dict)
 
 
+    def initialize_text(self,input_object):
+        self.input_object = input_object
 
+        self.tag = self.input_object['tag']
+
+        self.user_id = self.input_object['id']
+
+        self.text = self.input_object['text']
+
+        self.message_id = self.input_object['message_id']
+
+        return True
 
     def matched_users(self):
         """
