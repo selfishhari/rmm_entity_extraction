@@ -11,7 +11,9 @@ import sqlalchemy
 import sys
 from src.database_utils.database_config import DataBaseEngine
 from src.extractor.fuzz_match import FuzzySearch
-
+from src.extractor.service_extractor import ServiceExtractor
+from geopy import Point
+from geopy.distance import geodesic
 
 
 
@@ -58,7 +60,11 @@ class MatchUser():
 
             self.iterate_limit = self.catalog['ITERATE_LIMIT']
 
+            self.iterate_limit_kms = self.catalog['ITERATE_LIMIT_KMS']
+
             self.DATE_COLUMN = self.catalog['DATE_COLUMN']
+
+            self.service_extractor = ServiceExtractor(self.catalog)
 
             print("Done")
         except Exception as e:
@@ -237,7 +243,7 @@ class MatchUser():
             #checking if model is available for the brand, if not assigning none(model) for that brand
             if any(brand in model for model in models):
 
-                continue
+                break
 
             else:
 
@@ -355,15 +361,22 @@ class MatchUser():
             spell_check.check(string)
 
             matching_word = spell_check.suggestions()
-            print("2")
+
             #if there is a match, dataframe of matched string is formed
             if len(matching_word) > 0:
 
                 df_matching = pd.DataFrame(matching_word)
-                print("3")
-                print(matching_word)
+
                 extracted_dataframe = pd.concat([extracted_dataframe,df_matching])
-                print(extracted_dataframe)
+
+        #predicting service using naive bayes model
+        predicted_service = self.service_extractor.predict_label(string)
+
+        print("predicted service",predicted_service)
+
+        extracted_dataframe['service'] = predicted_service
+
+        print("@@@@")
         #creating dataframe
         extracted_dataframe['user_id']= self.user_id
 
@@ -381,7 +394,7 @@ class MatchUser():
 
         extracted_dataframe['date']= str(trans_date)
 
-        extracted_dataframe = extracted_dataframe[['user_id','date','tag','brand','model','message_id']]
+        extracted_dataframe = extracted_dataframe[['user_id','date','tag','brand','model','message_id','service']]
 
         #Dropping duplicates
         extracted_dataframe = extracted_dataframe.drop_duplicates()
@@ -414,6 +427,7 @@ class MatchUser():
 
         dataframe = dataframe.drop_duplicates()
 
+
         return dataframe
 
     def extract_brand_model(self,preprocessed_text):
@@ -440,52 +454,121 @@ class MatchUser():
 
         return extracted_dataframe
 
-    def get_pincode(self):
-        """To get the pincode of the shop of the user
 
-        Returns: Int
-            1. Users Pincode
+    def get_lat_long_user(self):
+        """To get the latitude and longitude of the shop of the user
+
+        Returns: String
+            1. latitude, longitude
         """
 
-        pin_code_query = "SELECT {} FROM {} WHERE {} = {};".format(self.catalog['PIN_COLUMN'],
-                                    self.shop_table,self.catalog['USER_ID_COLUMN'],self.user_id)
+        lat_long_query = "SELECT {},{} FROM {} WHERE {} = {};".format(self.catalog['LATITUDE_COLUMN'],
+                                self.catalog['LONGITUDE_COLUMN'],self.shop_table,self.catalog['USER_ID_COLUMN'],self.user_id)
 
-        pin_code_result = self.db_engine.execute(pin_code_query)
+        lat_long_result = pd.read_sql_query(lat_long_query,self.db_engine)
 
-        pin_code_list = [r[0] for r in pin_code_result]
+        print(lat_long_result)
+        latitude = lat_long_result.loc[0,'latitude']
 
-        return pin_code_list[0]
+        longitude = lat_long_result.loc[0,'longitude']
 
-    def _generate_pincodes(self,pincode,num=5):
-        """To generate pincodes based on pincode and range of number
+        return latitude,longitude
+
+    def _get_min_max_lat_long(self,east,north,south,west):
+        """Get minimum and maximum latitude and longitude based on directions
+
+        Returns: Dict
+            1. Lat Long Dict"""
+        lat_long = {}
+
+        latitude_list = []
+
+        longitude_list = []
+
+        #splitting string into list and appending latitude and longitude to separate list
+        east_lat = float(east.split(", ")[0])
+
+        east_long = float(east.split(", ")[1])
+
+        latitude_list.append(east_lat)
+
+        longitude_list.append(east_long)
+
+
+        north_lat = float(north.split(", ")[0])
+
+        north_long = float(north.split(", ")[1])
+
+        latitude_list.append(north_lat)
+
+        longitude_list.append(north_long)
+
+
+        south_lat = float(south.split(", ")[0])
+
+        south_long = float(south.split(", ")[1])
+
+        latitude_list.append(south_lat)
+
+        longitude_list.append(south_long)
+
+
+        west_lat = float(west.split(", ")[0])
+
+        west_long = float(west.split(", ")[1])
+
+        latitude_list.append(west_lat)
+
+        longitude_list.append(west_long)
+
+        #finding minimum and maximum of latitude and longitude and assigning it to dict
+        lat_long['lat_min'] = min(latitude_list)
+
+        lat_long['lat_max'] = max(latitude_list)
+
+        lat_long['long_min'] = min(longitude_list)
+
+        lat_long['long_max'] = max(longitude_list)
+
+        print(lat_long)
+        return lat_long
+
+    def _generate_lat_long(self,latitude,longitude,kms=5):
+        """To generate latitude and longitude based on lat long of user and range of kilometer
 
         Returns: List
-            1. Pincodes
+            1. Lat longs
         """
-        pincodes = []
+        east = geodesic(kilometers=kms).destination(Point(latitude, longitude), 90).format_decimal()
 
-        #negative range of pincode
-        for i in range(pincode-num,pincode):
+        north = geodesic(kilometers=kms).destination(Point(latitude, longitude), 0).format_decimal()
 
-            pincodes.append(i)
+        south = geodesic(kilometers=kms).destination(Point(latitude, longitude), 180).format_decimal()
 
-        #positive range of pincode
-        for j in range(pincode,pincode+num):
+        west = geodesic(kilometers=kms).destination(Point(latitude, longitude), 270).format_decimal()
 
-            pincodes.append(j)
+        lat_long = self._get_min_max_lat_long(east, north, south, west)
 
-        return tuple(pincodes)
+        return lat_long
 
-    def get_matching_user(self,pincodes):
+    def get_matching_user_by_lat_long(self,lat_long):
 
-        """To get users Id from database based on pincodes
+        """To get users Id from database based on lat long
 
         Returns: List
-            1. User Ids
+            1. User Idslat_max
         """
+        lat_min = lat_long['lat_min']
 
-        user_id_query = "SELECT {} FROM {} WHERE {} IN {};".format(self.catalog['USER_ID_COLUMN'],
-                                     self.shop_table,self.catalog['PIN_COLUMN'],pincodes)
+        lat_max = lat_long['lat_max']
+
+        long_min = lat_long['long_min']
+
+        long_max = lat_long['long_max']
+
+        user_id_query = "SELECT {} FROM {} WHERE {} BETWEEN {} AND {} AND {} BETWEEN {} and {}".format(self.catalog['USER_ID_COLUMN'],
+                                            self.shop_table,self.catalog['LATITUDE_COLUMN'],
+                                            lat_min,lat_max,self.catalog['LONGITUDE_COLUMN'],long_min,long_max)
 
         user_id_result = self.db_engine.execute(user_id_query)
 
@@ -497,56 +580,6 @@ class MatchUser():
         print(user_id_list)
 
         return user_id_list
-
-    # def _generate_lat_long(self,pincode,km=15):
-    #     """To generate latitude and longitude based on lat long of user and range of kilometer
-
-    #     Returns: List
-    #         1. Lat longs
-    #     """
-    #     lat_long = {}
-
-    #     #negative range of pincode
-    #     for i in range(pincode-num,pincode):
-
-    #         pincodes.append(i)
-
-    #     #positive range of pincode
-    #     for j in range(pincode,pincode+num):
-
-    #         pincodes.append(j)
-
-    #     return lat_long
-
-    # def get_matching_user_by_lat_long(self,lat_long):
-
-    #     """To get users Id from database based on lat long
-
-    #     Returns: List
-    #         1. User Ids
-    #     """
-    #     lat1 = lat_long['lat_1']
-
-    #     lat2 = lat_long['lat_2']
-
-    #     long1 = lat_long['long_1']
-
-    #     long2 = lat_long['long_2']
-
-    #     user_id_query = "SELCT {} FROM {} WHERE {} BETWEEN {} AND {} AND {} BETWEEN {} and {}".format(self.catalog['USER_ID_COLUMN'],
-    #                                         self.shop_table,self.catalog['LATITUDE_COLUMN'],
-    #                                         lat1,lat2,self.catalog['LONGITUDE_COLUMN'],long1,long2)
-
-    #     user_id_result = self.db_engine.execute(user_id_query)
-
-    #     user_id_list = [r[0] for r in user_id_result]
-
-    #     #removing the user id of the customer
-    #     user_id_list.remove(self.user_id)
-
-    #     print(user_id_list)
-
-    #     return user_id_list
 
 
 
@@ -583,6 +616,31 @@ class MatchUser():
         else:
             available_models = pd.DataFrame()
 
+        print(available_models)
+        return available_models
+
+    def _dataframe_available_all_value(self):
+
+        """Get the existing model and brand based on userId from the database
+
+        Returns: Dataframe
+            1. Models and brands with userId
+        """
+
+        #initializing extract tag
+        if self.tag =='sell':
+
+            tag = 'buy'
+
+        elif self.tag =='buy':
+
+            tag = 'sell'
+
+        extracted_model_query = "SELECT * from {} WHERE tag = '{}' AND {}>DATE_SUB(now(), {});".format(self.ce_table,
+                                            tag,self.DATE_COLUMN,self.INTERVAL)
+
+        available_models = pd.read_sql_query(extracted_model_query,self.db_engine)
+
         return available_models
 
 
@@ -604,40 +662,7 @@ class MatchUser():
 
             return False
 
-
-
-    def get_users(self,extracted_dataframe,available_models):
-
-        """Get final dataframe of users matching the brand and model extracted from the
-        text and returns users list
-
-        Returns: List
-            1. Final Users
-        """
-        #changing dtype of columns
-        extracted_dataframe['brand'] = extracted_dataframe[['brand']].astype(str)
-
-        extracted_dataframe['model'] = extracted_dataframe[['model']].astype(str)
-
-        available_models['brand'] = available_models[['brand']].astype(str)
-
-        available_models['model'] = available_models[['model']].astype(str)
-
-
-        # If the dataframe is empty, then merging on brand
-
-        final_df = pd.merge(extracted_dataframe, available_models, on=['brand'], how='inner')
-
-        # Still, if its empty merging, returning all
-        if final_df.empty:
-
-            final_df = available_models
-
-        final_list = final_df['user_id'].tolist()
-
-        return final_list
-
-    def get_messages(self,extracted_dataframe,available_models):
+    def get_matching_dataframe(self,extracted_dataframe,available_models):
 
         """Get final dataframe of users matching the brand and model extracted from the
         text and returns messages list
@@ -646,16 +671,22 @@ class MatchUser():
             1. Message Ids
         """
         #chnaging dtype of columns
+        extracted_dataframe = extracted_dataframe[['brand','model','service']]
+
         extracted_dataframe['brand'] = extracted_dataframe[['brand']].astype(str)
 
         extracted_dataframe['model'] = extracted_dataframe[['model']].astype(str)
+
+        extracted_dataframe['service'] = extracted_dataframe[['service']].astype(str)
 
         available_models['brand'] = available_models[['brand']].astype(str)
 
         available_models['model'] = available_models[['model']].astype(str)
 
+        available_models['service'] = available_models[['service']].astype(str)
+
         # Merging on both models and brands
-        final_df = pd.merge(extracted_dataframe, available_models, on=['brand','model'], how='inner')
+        final_df = pd.merge(extracted_dataframe, available_models, on=['brand','service'], how='inner')
 
         if final_df.empty:
 
@@ -668,54 +699,40 @@ class MatchUser():
 
                 final_df = available_models
 
-        final_list = final_df['message_id'].tolist()
+        print(final_df.columns)
+        return final_df
 
-        return final_list
-
-
-    def available_user_with_model(self,pincode):
-        """Generate pincodes based on user's pincode and get matching users
+    def available_user_with_model_matching(self,latitude,longitude,matching_dataframe):
+        """Generate pincodes based on user's latitude and lonigtude and get matching users
 
         Returns: Dataframe
             1. Models and brands with userId
         """
         available_dataframe = pd.DataFrame()
 
-        num = 5
+        kms = 5
 
         #Iterating till there is no empty datadframe
-        while(available_dataframe.empty)and(num<self.iterate_limit):
+        while(available_dataframe.empty)and(kms<self.iterate_limit_kms):
 
             #getting pincodes
 
-            pincodes_tuple = self._generate_pincodes(pincode,num)
+            lat_long = self._generate_lat_long(latitude,longitude,kms)
 
             #Identifying matching users available in the pincodes
-            matching_users = self.get_matching_user(pincodes_tuple)
+            matching_users = self.get_matching_user_by_lat_long(lat_long)
 
             matching_users = list(set(matching_users))
 
-            available_dataframe = self._dataframe_available(matching_users)
+            available_dataframe = matching_dataframe[matching_dataframe['user_id'].isin(matching_users)]
 
             #increasing number of pincodes to form
-            if num == 5:
 
-                num = 100
-
-            elif num == 100:
-
-                num = 1000
-
-            else:
-
-                num += 1000
-
+            kms += 5
 
         return available_dataframe
 
-
-
-    def get_users_available(self,available_dataframe,extracted_dataframe):
+    def get_users_available(self,available_dataframe):
         """Get matching users based on model and brand extracted from text and matching
         data from the database
 
@@ -723,10 +740,8 @@ class MatchUser():
             1. UserIds
         """
 
-        extracted_brand_model_df = extracted_dataframe[['brand','model']]
-
         #extracting final set of user matching our requirements
-        matched_users = self.get_users(extracted_brand_model_df,available_dataframe)
+        matched_users = available_dataframe['user_id'].tolist()
 
         user_dict = {}
 
@@ -735,23 +750,22 @@ class MatchUser():
 
         return json.dumps(user_dict)
 
-    def get_messages_available(self,available_dataframe,extracted_dataframe):
-        """Get matching users based on model and brand extracted from text and matching
+    def get_messages_available(self,available_dataframe):
+        """Get matching message ids based on model and brand extracted from text and matching
         data from the database
 
         Returns: JSON
             1. MessageIds
         """
 
-        extracted_brand_model_df = extracted_dataframe[['brand','model']]
-
         #extracting final set of user matching our requirements
-        matched_messages = self.get_messages(extracted_brand_model_df,available_dataframe)
+
+        message_ids = available_dataframe['message_id'].tolist()
 
         message_id_dict = {}
 
-        for i in range(len(set(matched_messages))):
-            message_id_dict[i] = matched_messages[i]
+        for i in range(len(set(message_ids))):
+            message_id_dict[i] = message_ids[i]
 
         return json.dumps(message_id_dict)
 
@@ -783,20 +797,34 @@ class MatchUser():
             JSON object of matching users ID.
         """
         try:
+           # preprocessing the text
             pre_processed_text = self.pre_processing(self.text)
 
+            #extracting model brand and service from the text
             extracted_dataframe = self.extract_brand_model(pre_processed_text)
 
+            #uploading the extracted dataframe
             upload_status = self.uploaded_dateframe(extracted_dataframe)
 
-            pincode = self.get_pincode()
+            #getting latitude and longitude of the user
+            latitude,longitude = self.get_lat_long_user()
+
+            #getting the dataframe of available model brand and service
+            available_dataframe = self._dataframe_available_all_value()
+            print(available_dataframe)
+
+            #matching the available brand model and service with extracted dataframe
+            matching_brand_service = self.get_matching_dataframe(extracted_dataframe,available_dataframe)
+            print(matching_brand_service)
 
             #upload status defines whether the extracted dataframe is successfully uploaded in the database
             if upload_status:
 
-                available_dataframe = self.available_user_with_model(pincode)
+                #getting the available user from matched messages according to users location
+                available_dataframe_final = self.available_user_with_model_matching(latitude,longitude,matching_brand_service)
+                print(available_dataframe_final)
 
-                user_json = self.get_users_available(available_dataframe,extracted_dataframe)
+                user_json = self.get_users_available(available_dataframe_final)
 
                 return user_json
 
@@ -819,20 +847,35 @@ class MatchUser():
             JSON object of matching users ID.
         """
         try:
+            # preprocessing the text
             pre_processed_text = self.pre_processing(self.text)
 
+            #extracting model brand and service from the text
             extracted_dataframe = self.extract_brand_model(pre_processed_text)
 
+            #uploading the extracted dataframe
             upload_status = self.uploaded_dateframe(extracted_dataframe)
 
-            pincode = self.get_pincode()
+            #getting latitude and longitude of the user
+            latitude,longitude = self.get_lat_long_user()
+
+            #getting the dataframe of available model brand and service
+            available_dataframe = self._dataframe_available_all_value()
+            print(available_dataframe)
+
+            #matching the available brand model and service with extracted dataframe
+            matching_brand_service = self.get_matching_dataframe(extracted_dataframe,available_dataframe)
+            print(matching_brand_service)
 
             #upload status defines whether the extracted dataframe is successfully uploaded in the database
             if upload_status:
 
-                available_dataframe = self.available_user_with_model(pincode)
+                #getting the available user from matched messages according to users location
+                available_dataframe_final = self.available_user_with_model_matching(latitude,longitude,matching_brand_service)
+                print(available_dataframe_final)
 
-                message_json = self.get_messages_available(available_dataframe,extracted_dataframe)
+                #getting the message ids
+                message_json = self.get_messages_available(available_dataframe_final)
 
                 return message_json
 

@@ -1,7 +1,7 @@
 from fuzzywuzzy import fuzz
 import sys, os
 
-sys.path.append("/home/ec2-user/rmm_entity_extraction")
+sys.path.append("/home/viky/Desktop/freelancer/flask")
 from conf.public import catalog
 
 

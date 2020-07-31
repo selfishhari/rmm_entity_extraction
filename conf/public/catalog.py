@@ -64,3 +64,15 @@ FUZZ_PERCENT = 75   #Matching percent
 ITERATE_LIMIT = 20000 #Iterate limit for pincode
 
 ITERATE_LIMIT_KMS = 45 # Iterate limit for lat long matching
+
+#------Trained Models-------------------------
+
+VECTORIZED_MODEL = "/home/ec2-user/rmm_entity_extraction/data_rmm/Models/vectorizer.model" #TFIDF vector model
+
+NAIVE_BAYES_MODEL = "/home/ec2-user/rmm_entity_extraction/data_rmm/Models/naivebayes_2.model" #Naive Bayes Model
+
+KNOWN_CATEGORIES = ['service', 'others', 'combo', 'file', 'motherboard', 'flash box']
+
+OTHER_CATEGORIES = ['unlock dongle','flash tool','flash box,service','repairing tool', 'battery',
+ 'mobile repair parts,combo,battery,cover,touch display', 'flash dongle', 'ic','back panel','country unlock sim',
+ 'data cable','glue remover','short remover ','microscope','mobile','oca machine','power bank']
