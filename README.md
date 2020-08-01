@@ -5,15 +5,15 @@ Entity Extraction Sytem for RMM's customer support interface
 Install Python 3.6+ version and create a virtual environment. Install the dependency packages using requirements.txt file
 
 ## Table of contents
-> deploy_extraction_service
-> entity_extractor
-> service_extractor
-> fuzz_match
-> update_brands
-> update_alternative_names
-> update_brand_ranks
-> test_class
-> database_config
+- deploy_extraction_service
+- entity_extractor
+- service_extractor
+- fuzz_match
+- update_brands
+- update_alternative_names
+- update_brand_ranks
+- test_class
+- database_config
 
 
 ### deploy_extraction_service
