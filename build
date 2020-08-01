@@ -1,14 +1,22 @@
 #Scripts to build and deploy RMM application
 
+########### cloning the files from github
 sudo yum update -y
 sudo yum install git -y
-git clone -b vignesh --single-branch https://github.com/selfishhari/rmm_entity_extraction.git
+git clone -b vignesh --single-branch https://username:password@github.com/selfishhari/rmm_entity_extraction.git
 
 ########### install mysql
 
 sudo yum install mysql-server -y
 sudo chkconfig mysqld on
 sudo service mysqld start
+
+
+########## Adding cs_entity table to database
+
+cd rmm_entity_extraction/
+
+cat cs_entity.sql | mysql -u <mysqluser> -p <dbname>  
 
 ########## Setting up python with anaconda
 
