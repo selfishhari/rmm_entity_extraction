@@ -2,7 +2,12 @@
 Entity Extraction Sytem for RMM's customer support interface
 
 ## Installation
-Install Python 3.6+ version and create a virtual environment. Install the dependency packages using requirements.txt file
+- Install Python 3.6+ version 
+- Install virtual environment
+- Install MySQL
+- Create a virtual environment. 
+- Activate the virtual environment and install the dependency packages using requirements.txt file
+- Start the service using the command "python deploy_extraction_service.py"
 
 ## Table of contents
 - deploy_extraction_service
