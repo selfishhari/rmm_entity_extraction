@@ -49,13 +49,13 @@ LONGITUDE_COLUMN = "longitude"
 
 #-----------test class----------------------
 
-TEST_OUTPUT_BRAND_CSV = "/home/ec2-user/rmm_entity_extraction/data_rmm/Outputs/test_output_brand.csv"
+TEST_OUTPUT_BRAND_CSV = "/home/ec2-user/rmm_entity_extraction/data/Outputs/test_output_brand.csv"
 
-TEST_OUTPUT_MODEL_CSV = "/home/ec2-user/rmm_entity_extraction/data_rmm/Outputs/public/test_output_model.csv"
+TEST_OUTPUT_MODEL_CSV = "/home/ec2-user/rmm_entity_extraction/data/Outputs/public/test_output_model.csv"
 
-TEST_SET_BRAND = "/home/ec2-user/rmm_entity_extraction/data_rmm/Inputs/test_set_brands2.csv"
+TEST_SET_BRAND = "/home/ec2-user/rmm_entity_extraction/data/Inputs/test_set_brands2.csv"
 
-TEST_SET_MODELS = "/home/ec2-user/rmm_entity_extraction/data_rmm/Inputs/test_set_models2.csv"
+TEST_SET_MODELS = "/home/ec2-user/rmm_entity_extraction/data/Inputs/test_set_models2.csv"
 
 #--------parameters------------
 
@@ -67,12 +67,15 @@ ITERATE_LIMIT_KMS = 45 # Iterate limit for lat long matching
 
 #------Trained Models-------------------------
 
-VECTORIZED_MODEL = "/home/ec2-user/rmm_entity_extraction/data_rmm/Models/vectorizer.model" #TFIDF vector model
+VECTORIZED_MODEL = "/home/ec2-user/rmm_entity_extraction/data/Models/vectorizer.model" #TFIDF vector model
 
-NAIVE_BAYES_MODEL = "/home/ec2-user/rmm_entity_extraction/data_rmm/Models/naivebayes_2.model" #Naive Bayes Model
+NAIVE_BAYES_MODEL = "/home/ec2-user/rmm_entity_extraction/data/Models/naivebayes_2.model" #Naive Bayes Model
 
 KNOWN_CATEGORIES = ['service', 'others', 'combo', 'file', 'motherboard', 'flash box']
 
 OTHER_CATEGORIES = ['unlock dongle','flash tool','flash box,service','repairing tool', 'battery',
  'mobile repair parts,combo,battery,cover,touch display', 'flash dongle', 'ic','back panel','country unlock sim',
  'data cable','glue remover','short remover ','microscope','mobile','oca machine','power bank']
+
+
+substring =  []

@@ -18,6 +18,7 @@ class ServiceExtractor():
 
         self.other_categories = self.catalog['OTHER_CATEGORIES']
 
+        self.substring = self.catalog['substring']
 
     def _check(self,string, sub_str):
 
@@ -38,12 +39,13 @@ class ServiceExtractor():
     def string_sub_search(self,string):
         """Checking the string for possible matches in known categories"""
 
-        all_categories = self.known_categories + self.other_categories
+        all_categories = self.substring
 
-        all_categories.remove('others')
+        # all_categories.remove('others')
 
         service = []
 
+        #print("^^^^^^^^^^",all_categories)
         for x in all_categories:
 
             if self._check(string,x):
@@ -82,6 +84,7 @@ class ServiceExtractor():
         """Predicting the service from the given text"""
 
         #First stage of search with known categories
+        print("@@@@@@",string)
         string_sub_search_result = self.string_sub_search(string)
 
         #if there is no match in first stage, then predicting the service using naivebayes
@@ -99,9 +102,9 @@ class ServiceExtractor():
             service = preds_label_dec[0]
 
             #if the predicted label is others, then searching for other categories
-            if service == "others":
+            # if service == "others":
 
-                service = self._search_other_categories(string)
+            #     service = self._search_other_categories(string)
 
 
         else:
