@@ -12,9 +12,11 @@ sudo chkconfig mysqld on
 sudo service mysqld start
 
 
-########## Adding cs_entity table to database
+########## Adding existing database and cs_entity table to database
 
 cd rmm_entity_extraction/
+
+cat rmm_extraction.sql | mysql -u <mysqluser> -p <dbname>
 
 cat cs_entity.sql | mysql -u <mysqluser> -p <dbname>  
 
@@ -38,9 +40,9 @@ sudo yum -y install gcc
 
 pip install -U -r requirements.txt 
 
-export rmm_db_username='USERNAME'
+export rmm_user='USERNAME'
 
-export rmm_db_password='PASSWORD'
+export rmm_password='PASSWORD'
 
 sudo yum install tmux
 
@@ -49,5 +51,5 @@ tmux new -s api
 
 conda activate rmm_deploy
 
-python rmm_entity_extraction/app.py
+python rmm_entity_extraction/deploy_extraction_service.py
 
