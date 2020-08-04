@@ -31,7 +31,7 @@ DB_HOST = "localhost"
 
 DB_NAME = "rmm_entity"
 
-INTERVAL = "INTERVAL 1 DAY" #Time Interval for extract query
+INTERVAL = "INTERVAL 5 DAY" #Time Interval for extract query
 
 SHOP_TABLE = "shops"
 
@@ -51,11 +51,15 @@ LONGITUDE_COLUMN = "longitude"
 
 TEST_OUTPUT_BRAND_CSV = "/home/ec2-user/rmm_entity_extraction/data/Outputs/test_output_brand.csv"
 
-TEST_OUTPUT_MODEL_CSV = "/home/ec2-user/rmm_entity_extraction/data/Outputs/public/test_output_model.csv"
+TEST_OUTPUT_MODEL_CSV = "/home/ec2-user/rmm_entity_extraction/data/Outputs/test_output_model.csv"
+
+TEST_OUTPUT_SERVICE_CSV = "/home/ec2-user/rmm_entity_extraction/data/Outputs/test_output_service.csv"
 
 TEST_SET_BRAND = "/home/ec2-user/rmm_entity_extraction/data/Inputs/test_set_brands2.csv"
 
 TEST_SET_MODELS = "/home/ec2-user/rmm_entity_extraction/data/Inputs/test_set_models2.csv"
+
+TEST_SET_SERVICE = "/home/ec2-user/rmm_entity_extraction/data/Inputs/test_service.csv"
 
 #--------parameters------------
 
@@ -78,4 +82,4 @@ OTHER_CATEGORIES = ['unlock dongle','flash tool','flash box,service','repairing 
  'data cable','glue remover','short remover ','microscope','mobile','oca machine','power bank']
 
 
-substring =  []
+substring =  ["combo"]
