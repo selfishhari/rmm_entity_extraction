@@ -9,21 +9,21 @@ TELEGRAM_QUESTION = "telegram question"
 
 #----------------------input files-------------------------
 
-EXCEL_SHEET = "/home/ec2-user/rmm_entity_extraction/data_rmm_rmm/Inputs/Hari Mobile chatbot.xlsx"
+EXCEL_SHEET = "/home/ec2-user/rmm_entity_extraction/data/Inputs/Hari Mobile chatbot.xlsx"
 
-brand_model_csv = "/home/ec2-user/rmm_entity_extraction/data_rmm/Inputs/brand_model_2.csv"
+brand_model_csv = "/home/ec2-user/rmm_entity_extraction/data/Inputs/brand_model_2.csv"
 
-alternative_name_csv = "/home/ec2-user/rmm_entity_extraction/data_rmm/Inputs/alternative_name.csv"
+alternative_name_csv = "/home/ec2-user/rmm_entity_extraction/data/Inputs/alternative_name.csv"
 
-brand_rank_csv = "/home/ec2-user/rmm_entity_extraction/data_rmm/Inputs/brand_rank.csv"
+brand_rank_csv = "/home/ec2-user/rmm_entity_extraction/data/Inputs/brand_rank.csv"
 
 #-------------------output files-------------------------
 
-CSV_OUTPUT_BRAND_MODEL = "/home/ec2-user/rmm_entity_extraction/data_rmm/Outputs/brand_model.csv"
+CSV_OUTPUT_BRAND_MODEL = "/home/ec2-user/rmm_entity_extraction/data/Outputs/brand_model.csv"
 
-CSV_OUTPUT_BRAND_RANK = "/home/ec2-user/rmm_entity_extraction/data_rmm/Outputs/brand_rank.csv"
+CSV_OUTPUT_BRAND_RANK = "/home/ec2-user/rmm_entity_extraction/data/Outputs/brand_rank.csv"
 
-CSV_OUTPUT_ALTERNATIVE_NAME = "/home/ec2-user/rmm_entity_extraction/data_rmm/Outputs/alternative_name.csv"
+CSV_OUTPUT_ALTERNATIVE_NAME = "/home/ec2-user/rmm_entity_extraction/data/Outputs/alternative_name.csv"
 
 #--------------database config--------------------------
 
