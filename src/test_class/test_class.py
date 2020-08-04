@@ -122,7 +122,9 @@ class AccuracyMeasure():
             input_object = {'id':1,'text':question,'tag':'buy','user_id':543,'message_id':6}
 
             #predicting brands and model
-            match_user = MatchUser(self.catalog,self.credentials,input_object)
+            match_user = MatchUser(self.catalog,self.credentials)
+
+            match_user.initialize_text(input_object)
 
             preprocessed_text = match_user.pre_processing(match_user.text)
 
@@ -173,6 +175,8 @@ class AccuracyMeasure():
 
             #predicting brands and model
             match_user = MatchUser(self.catalog,self.credentials,input_object)
+
+            match_user.initialize_text(input_object)
 
             preprocessed_text = match_user.pre_processing(match_user.text)
 
