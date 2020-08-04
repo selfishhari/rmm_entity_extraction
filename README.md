@@ -11,7 +11,7 @@ Entity Extraction Sytem for RMM's customer support interface
 
 ## Configurations
 ### conf/public/catalog
-The file is used to configure database variables, input, output files, models etc.,
+The file is used to configure database variables such as tables,columns, location of input and output files, models etc.,
 
 ### build_deploy
 The file explains you the step by step deployment of the application in the server
