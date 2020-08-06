@@ -25,21 +25,22 @@ CREATE DATABASE db_name;
 
 ##### refer build_developer script for configuring database #############
 
+##### install ngnix
+sudo yum install epel-release
+
+sudo yum install nginx
+
+sudo systemctl start nginx
+
 ########## Setting up python with anaconda
 
 cd rmm_entity_extraction/
 
-wget https://repo.anaconda.com/archive/Anaconda3-2020.02-Linux-x86_64.sh
+pip install virtualenv
 
-sha256sum Anaconda3-2020.02-Linux-x86_64.sh
+python3 -m venv rmm_venv
 
-bash Anaconda3-2020.02-Linux-x86_64.sh
-
-conda list #to check installation
-
-conda create -n rmm_deploy python=3.6
-
-conda activate rmm_deploy
+source rmm_venv/bin/activate
 
 sudo yum install -y mysql-devel
 
@@ -79,12 +80,25 @@ errorlog = "/home/ec2-user/rmm_entity_extraction/logs/gunicorn_error.log"
 
 gunicorn -c gunicorn.conf -b 0.0.0.0:5000 deploy_extraction_service:app
 
-##### install tmux to run gunicorn
+###deactivate the virtual environment
 
-sudo yum install tmux
+deactivate 
 
-tmux new -s api
+#### write daemon file
 
-source activate rmm_deploy_service
+sudo nano run.sh
 
-gunicorn -c gunicorn.conf -b 0.0.0.0:5000 deploy_extraction_service:app
+### copy the commands in sample_run.sh file and paste it
+
+### create daemon
+
+sudo nano /etc/systemd/system/rmm.service
+
+### copy the code in the sample_service file and paste it and change path and user name
+
+sudo systemctl daemon-reload
+
+sudo systemctl start rmm
+
+sudo systemctl enable rmm
+

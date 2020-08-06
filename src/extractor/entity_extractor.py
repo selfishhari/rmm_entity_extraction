@@ -743,9 +743,11 @@ class MatchUser():
         #extracting final set of user matching our requirements
         matched_users = available_dataframe['user_id'].tolist()
 
+        matched_users = list(set(matched_users))
+
         user_dict = {}
 
-        for i in range(len(set(matched_users))):
+        for i in range(len(matched_users)):
             user_dict[i] = matched_users[i]
 
         return json.dumps(user_dict)
@@ -762,9 +764,11 @@ class MatchUser():
 
         message_ids = available_dataframe['message_id'].tolist()
 
+        message_ids = list(set(message_ids))
+
         message_id_dict = {}
 
-        for i in range(len(set(message_ids))):
+        for i in range(len(message_ids)):
             message_id_dict[i] = message_ids[i]
 
         return json.dumps(message_id_dict)

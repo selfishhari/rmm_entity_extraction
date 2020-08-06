@@ -73,7 +73,7 @@ ITERATE_LIMIT_KMS = 45 # Iterate limit for lat long matching
 
 VECTORIZED_MODEL = "/home/ec2-user/rmm_entity_extraction/data/Models/vectorizer.model" #TFIDF vector model
 
-NAIVE_BAYES_MODEL = "/home/ec2-user/rmm_entity_extraction/data/Models/naivebayes_2.model" #Naive Bayes Model
+NAIVE_BAYES_MODEL = "/home/ec2-user/rmm_entity_extraction/data/Models/naivebayes.model" #Naive Bayes Model
 
 KNOWN_CATEGORIES = ['service', 'others', 'combo', 'file', 'motherboard', 'flash box']
 
