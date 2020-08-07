@@ -11,6 +11,11 @@ sudo yum install mysql-server -y
 sudo chkconfig mysqld on
 sudo service mysqld start
 
+###### writting daemon service file 
+###### copy and paste the service file
+
+sudo nano /etc/systemd/system/rmm.service
+
 ########## create username and password for mysql and create database
 
 ########## create new user and password and database and cs_entity table
@@ -47,7 +52,7 @@ pip install -U -r requirements.txt
 
 #### downloading nltk packages#############
 
-sudo python3 -m nltk.downloader -d /usr/local/share/nltk_data all
+bash nltk.sh
 
 ################# install gunicorn
 
@@ -57,7 +62,7 @@ mkdir logs
 
 ############## build gunicorn
 
-gunicorn -c gunicorn.conf -b 0.0.0.0:5000 deploy_extraction_service:app
+gunicorn -c gunicorn.conf -b 0.0.0.0:5010 deploy_extraction_service:app
 
 ###deactivate the virtual environment
 
@@ -67,11 +72,7 @@ deactivate
 
 cat sample_run > run.sh
 
-### create daemon
-
-sudo nano /etc/systemd/system/rmm.service
-
-####copy and paste the service file
+####start daemon service
 
 sudo systemctl daemon-reload
 

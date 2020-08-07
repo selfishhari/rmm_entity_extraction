@@ -4,9 +4,7 @@ CREATE USER 'newuser'@'localhost' IDENTIFIED BY 'password';
 
 GRANT ALL PRIVILEGES ON * . * TO 'newuser'@'localhost';
 
-CREATE DATABASE rmm_entity;
-
-USE rmm_entity;
+USE db_name;
 
 
 CREATE TABLE `cs_entity` (

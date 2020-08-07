@@ -5,11 +5,14 @@ Entity Extraction Sytem for RMM's customer support interface
 - Install Python 3.6+ version 
 - Install virtual environment
 - Install MySQL
+- Create Daemon Service file
 - Create a virtual environment. 
-- Activate the virtual environment and install the dependency packages using requirements.txt file
-- Start the service using the command "python deploy_extraction_service.py"
 - Change the path of logs folder in gunicorn.conf
 - Change username and password and database name in cs_entity.sql
+- Activate the virtual environment and install the dependency packages using requirements.txt file
+- Download nltk package using nltk.sh
+- Start the service using the command "python deploy_extraction_service.py"
+- Activate daemon service
 
 ## Configurations
 ### conf/public/catalog
@@ -66,3 +69,6 @@ Configure the location of the folder in the sample_run file
 
 ### sample_service
 Configure the location of run.sh file in the sample_service file
+
+###nltk.sh
+This bash script file is used to download NLTK packages

@@ -29,9 +29,9 @@ CSV_OUTPUT_ALTERNATIVE_NAME = "/home/centos/rmm_entity_extraction/data/Outputs/a
 
 DB_HOST = "localhost"
 
-DB_NAME = "rmm_entity"
+DB_NAME = "rootvj_rmm_ai"
 
-INTERVAL = "INTERVAL 5 DAY" #Time Interval for extract query
+INTERVAL = "INTERVAL 1 YEAR" #Time Interval for extract query
 
 SHOP_TABLE = "shops"
 
@@ -68,7 +68,7 @@ FUZZ_PERCENT = 75   #Matching percent
 
 ITERATE_LIMIT = 20000 #Iterate limit for pincode
 
-ITERATE_LIMIT_KMS = 45 # Iterate limit for lat long matching
+ITERATE_LIMIT_KMS = 1000 # Iterate limit for lat long matching
 
 #------Trained Models-------------------------
 
