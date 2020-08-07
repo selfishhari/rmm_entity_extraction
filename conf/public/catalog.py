@@ -29,7 +29,7 @@ CSV_OUTPUT_ALTERNATIVE_NAME = "/home/centos/rmm_entity_extraction/data/Outputs/a
 
 DB_HOST = "localhost"
 
-DB_NAME = "rootvj_rmm_ai"
+DB_NAME = "rootvj_db_shop_rmm"
 
 INTERVAL = "INTERVAL 1 YEAR" #Time Interval for extract query
 
