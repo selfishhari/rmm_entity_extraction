@@ -2,15 +2,15 @@
 Entity Extraction Sytem for RMM's customer support interface
 
 ## Installation
+**Refer to build_deploy script and run commands step by step**
 - Install Python 3.6+ version 
-- Install virtual environment
 - Install MySQL
-- Create Daemon Service file
-- Create a virtual environment. 
-- Change the path of logs folder in gunicorn.conf
-- **Change username and password in cs_entity.sql and update the same in run.sh**
+- Install and Create a virtual environment.
 - Activate the virtual environment and install the dependency packages using requirements.txt file
 - Download nltk package using nltk.sh
+- Update the path of logs folder in gunicorn.conf
+- **Change username and password in cs_entity.sql and update the same in run.sh**
+- **Copy sample_service contents to sudo nano /etc/systemd/system/rmm.service**
 - Activate daemon service
 
 ## Configurations
