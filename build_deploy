@@ -12,7 +12,7 @@ sudo chkconfig mysqld on
 sudo service mysqld start
 
 ###### writting daemon service file 
-###### copy and paste the service file
+###### copy and paste the sample_service in below file
 
 sudo nano /etc/systemd/system/rmm.service
 
