@@ -8,7 +8,7 @@ Entity Extraction Sytem for RMM's customer support interface
 - Create Daemon Service file
 - Create a virtual environment. 
 - Change the path of logs folder in gunicorn.conf
-- **Change username and password and database name in cs_entity.sql and update the same in run.sh**
+- **Change username and password in cs_entity.sql and update the same in run.sh**
 - Activate the virtual environment and install the dependency packages using requirements.txt file
 - Download nltk package using nltk.sh
 - Activate daemon service
