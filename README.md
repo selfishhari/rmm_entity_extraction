@@ -29,7 +29,8 @@ This file is useful for developers to configure the database and other environme
 - update_brand_ranks
 - test_class
 - database_config
-
+- sample_run
+- sample_service
 
 ### deploy_extraction_service
 The file consists of api's for customer support interface
@@ -57,3 +58,9 @@ The test class is used to find the accuracy of entity_extractor.
 
 ### database_config
 The database config is used the configure the database and helps the entity_extractor to extract matching users from the database
+
+### sample_run
+Configure the location of the folder in the sample_run file
+
+### sample_service
+Configure the location of run.sh file in the sample_service file

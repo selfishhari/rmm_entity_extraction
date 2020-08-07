@@ -61,6 +61,7 @@ TEST_SET_MODELS = "/home/ec2-user/rmm_entity_extraction/data/Inputs/test_set_mod
 
 TEST_SET_SERVICE = "/home/ec2-user/rmm_entity_extraction/data/Inputs/test_service.csv"
 
+POPULATE_SET = "/home/ec2-user/rmm_entity_extraction/data/Inputs/populate_set.csv"
 #--------parameters------------
 
 FUZZ_PERCENT = 75   #Matching percent

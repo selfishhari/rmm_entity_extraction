@@ -1,7 +1,7 @@
 
 #!/bin/bash
-source /home/centos/rmm_entity_extraction/rmm_venv/bin/activate            #change path for virtual environment
-cd /home/centos/rmm_entity_extraction					   #change path for working directory
+source /home/ec2-user/rmm_entity_extraction/rmm_venv/bin/activate            #change path for virtual environment
+cd /home/ec2-user/rmm_entity_extraction					   #change path for working directory
 gunicorn -c gunicorn.conf -b 0.0.0.0:5000 deploy_extraction_service:app
 
 
