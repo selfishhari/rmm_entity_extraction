@@ -36,7 +36,7 @@ sudo systemctl start nginx
 
 cd rmm_entity_extraction/
 
-pip install virtualenv
+sudo yum install -y python3
 
 python3 -m venv rmm_venv
 
@@ -85,20 +85,21 @@ gunicorn -c gunicorn.conf -b 0.0.0.0:5000 deploy_extraction_service:app
 deactivate 
 
 #### write daemon file
-
-sudo nano run.sh
-
-### copy the commands in sample_run.sh file and paste it
+cat sample_run > run.sh
 
 ### create daemon
-
 sudo nano /etc/systemd/system/rmm.service
 
-### copy the code in the sample_service file and paste it and change path and user name
+####copy and paste the service file
 
 sudo systemctl daemon-reload
 
 sudo systemctl start rmm
 
 sudo systemctl enable rmm
+
+
+
+##### To stop the server
+sudo systemctl stop rmm
 
