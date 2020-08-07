@@ -8,6 +8,8 @@ Entity Extraction Sytem for RMM's customer support interface
 - Create a virtual environment. 
 - Activate the virtual environment and install the dependency packages using requirements.txt file
 - Start the service using the command "python deploy_extraction_service.py"
+- Change the path of logs folder in gunicorn.conf
+- Change username and password and database name in cs_entity.sql
 
 ## Configurations
 ### conf/public/catalog

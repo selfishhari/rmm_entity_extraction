@@ -17,15 +17,14 @@ sudo service mysqld start
 
 mysql -u root -p
 
-CREATE USER 'newuser'@'localhost' IDENTIFIED BY 'password';
+cat user_db.sql | mysql -u <mysqluser> -p 
 
-GRANT ALL PRIVILEGES ON * . * TO 'newuser'@'localhost';
-
-CREATE DATABASE db_name;
+cat cs_entity.sql | mysql -u <mysqluser> -p <dbname>  
 
 ##### refer build_developer script for configuring database #############
 
 ##### install ngnix
+
 sudo yum install epel-release
 
 sudo yum install nginx
@@ -50,31 +49,15 @@ sudo yum -y install gcc
 
 pip install -U -r requirements.txt 
 
-#### downloading nltk packages using python3 shell
+#### downloading nltk packages#############
 
-python3
-
-import nltk
-
-nltk.download('stopwords')
-
-nltk.download('punkt')
-
-exit()
-
+sudo python3 -m nltk.downloader -d /usr/local/share/nltk_data all
 
 ################# install gunicorn
 
 pip install flask gunicorn
 
 mkdir logs
-
-sudo nano gunicorn.conf
-
-######## paste the following and change the directory
-
-accesslog = "/home/ec2-user/rmm_entity_extraction/logs/gunicorn_access.log"
-errorlog = "/home/ec2-user/rmm_entity_extraction/logs/gunicorn_error.log"
 
 ############## build gunicorn
 
@@ -85,9 +68,11 @@ gunicorn -c gunicorn.conf -b 0.0.0.0:5000 deploy_extraction_service:app
 deactivate 
 
 #### write daemon file
+
 cat sample_run > run.sh
 
 ### create daemon
+
 sudo nano /etc/systemd/system/rmm.service
 
 ####copy and paste the service file
@@ -99,5 +84,6 @@ sudo systemctl start rmm
 sudo systemctl enable rmm
 
 ##### To stop the server
+
 sudo systemctl stop rmm
 

@@ -7,14 +7,6 @@ cd rmm_entity_extraction/
 
 cat rmm_extraction.sql | mysql -u <mysqluser> -p <dbname>
 
-cat cs_entity.sql | mysql -u <mysqluser> -p <dbname>  
-
-
-
-### If there is existing database do the following
-
-cat cs_entity.sql | mysql -u <mysqluser> -p <dbname>  
-
 
 #credential variables
 
