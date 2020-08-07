@@ -27,11 +27,11 @@ cat cs_entity.sql | mysql -u root -p
 
 ##### install ngnix
 
-sudo yum install epel-release
+#sudo yum install epel-release
 
-sudo yum install nginx
+#sudo yum install nginx
 
-sudo systemctl start nginx
+#sudo systemctl start nginx
 
 ########## Setting up python with anaconda
 
