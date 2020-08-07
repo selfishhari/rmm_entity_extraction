@@ -98,8 +98,6 @@ sudo systemctl start rmm
 
 sudo systemctl enable rmm
 
-
-
 ##### To stop the server
 sudo systemctl stop rmm
 
