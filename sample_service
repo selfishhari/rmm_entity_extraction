@@ -3,7 +3,7 @@ Description=rmm_entity
 
 [Service]
 Type=simple
-ExecStart=/bin/bash /home/ec2-user/rmm_entity_extraction/run.sh  
+ExecStart=/bin/bash /home/centos/rmm_entity_extraction/run.sh  
 
 [Install]
 WantedBy=multi-user.target

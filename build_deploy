@@ -79,7 +79,7 @@ sudo systemctl start rmm
 
 sudo systemctl enable rmm
 
-##### To stop the server
+##### To stop the server ##### when you need to stop the server
 
-sudo systemctl stop rmm
+#sudo systemctl stop rmm 
 

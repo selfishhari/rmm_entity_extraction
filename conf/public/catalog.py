@@ -9,21 +9,21 @@ TELEGRAM_QUESTION = "telegram question"
 
 #----------------------input files-------------------------
 
-EXCEL_SHEET = "/home/ec2-user/rmm_entity_extraction/data/Inputs/Hari Mobile chatbot.xlsx"
+EXCEL_SHEET = "/home/centos/rmm_entity_extraction/data/Inputs/Hari Mobile chatbot.xlsx"
 
-brand_model_csv = "/home/ec2-user/rmm_entity_extraction/data/Inputs/brand_model_2.csv"
+brand_model_csv = "/home/centos/rmm_entity_extraction/data/Inputs/brand_model_2.csv"
 
-alternative_name_csv = "/home/ec2-user/rmm_entity_extraction/data/Inputs/alternative_name.csv"
+alternative_name_csv = "/home/centos/rmm_entity_extraction/data/Inputs/alternative_name.csv"
 
-brand_rank_csv = "/home/ec2-user/rmm_entity_extraction/data/Inputs/brand_rank.csv"
+brand_rank_csv = "/home/centos/rmm_entity_extraction/data/Inputs/brand_rank.csv"
 
 #-------------------output files-------------------------
 
-CSV_OUTPUT_BRAND_MODEL = "/home/ec2-user/rmm_entity_extraction/data/Outputs/brand_model.csv"
+CSV_OUTPUT_BRAND_MODEL = "/home/centos/rmm_entity_extraction/data/Outputs/brand_model.csv"
 
-CSV_OUTPUT_BRAND_RANK = "/home/ec2-user/rmm_entity_extraction/data/Outputs/brand_rank.csv"
+CSV_OUTPUT_BRAND_RANK = "/home/centos/rmm_entity_extraction/data/Outputs/brand_rank.csv"
 
-CSV_OUTPUT_ALTERNATIVE_NAME = "/home/ec2-user/rmm_entity_extraction/data/Outputs/alternative_name.csv"
+CSV_OUTPUT_ALTERNATIVE_NAME = "/home/centos/rmm_entity_extraction/data/Outputs/alternative_name.csv"
 
 #--------------database config--------------------------
 
@@ -49,19 +49,19 @@ LONGITUDE_COLUMN = "longitude"
 
 #-----------test class----------------------
 
-TEST_OUTPUT_BRAND_CSV = "/home/ec2-user/rmm_entity_extraction/data/Outputs/test_output_brand.csv"
+TEST_OUTPUT_BRAND_CSV = "/home/centos/rmm_entity_extraction/data/Outputs/test_output_brand.csv"
 
-TEST_OUTPUT_MODEL_CSV = "/home/ec2-user/rmm_entity_extraction/data/Outputs/test_output_model.csv"
+TEST_OUTPUT_MODEL_CSV = "/home/centos/rmm_entity_extraction/data/Outputs/test_output_model.csv"
 
-TEST_OUTPUT_SERVICE_CSV = "/home/ec2-user/rmm_entity_extraction/data/Outputs/test_output_service.csv"
+TEST_OUTPUT_SERVICE_CSV = "/home/centos/rmm_entity_extraction/data/Outputs/test_output_service.csv"
 
-TEST_SET_BRAND = "/home/ec2-user/rmm_entity_extraction/data/Inputs/test_set_brands2.csv"
+TEST_SET_BRAND = "/home/centos/rmm_entity_extraction/data/Inputs/test_set_brands2.csv"
 
-TEST_SET_MODELS = "/home/ec2-user/rmm_entity_extraction/data/Inputs/test_set_models2.csv"
+TEST_SET_MODELS = "/home/centos/rmm_entity_extraction/data/Inputs/test_set_models2.csv"
 
-TEST_SET_SERVICE = "/home/ec2-user/rmm_entity_extraction/data/Inputs/test_service.csv"
+TEST_SET_SERVICE = "/home/centos/rmm_entity_extraction/data/Inputs/test_service.csv"
 
-POPULATE_SET = "/home/ec2-user/rmm_entity_extraction/data/Inputs/populate_set.csv"
+POPULATE_SET = "/home/centos/rmm_entity_extraction/data/Inputs/populate_set.csv"
 #--------parameters------------
 
 FUZZ_PERCENT = 75   #Matching percent
@@ -72,9 +72,9 @@ ITERATE_LIMIT_KMS = 45 # Iterate limit for lat long matching
 
 #------Trained Models-------------------------
 
-VECTORIZED_MODEL = "/home/ec2-user/rmm_entity_extraction/data/Models/vectorizer.model" #TFIDF vector model
+VECTORIZED_MODEL = "/home/centos/rmm_entity_extraction/data/Models/vectorizer.model" #TFIDF vector model
 
-NAIVE_BAYES_MODEL = "/home/ec2-user/rmm_entity_extraction/data/Models/naivebayes.model" #Naive Bayes Model
+NAIVE_BAYES_MODEL = "/home/centos/rmm_entity_extraction/data/Models/naivebayes.model" #Naive Bayes Model
 
 KNOWN_CATEGORIES = ['service', 'others', 'combo', 'file', 'motherboard', 'flash box']
 
