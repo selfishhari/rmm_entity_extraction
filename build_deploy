@@ -13,13 +13,9 @@ sudo service mysqld start
 
 ########## create username and password for mysql and create database
 
-########## log into mysql using root and create new user and password
+########## create new user and password and database and cs_entity table
 
-mysql -u root -p
-
-cat user_db.sql | mysql -u <mysqluser> -p 
-
-cat cs_entity.sql | mysql -u <mysqluser> -p <dbname>  
+cat cs_entity.sql | mysql -u root -p 
 
 ##### refer build_developer script for configuring database #############
 
