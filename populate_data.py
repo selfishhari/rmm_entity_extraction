@@ -15,7 +15,7 @@ class PopulateData:
 
         self.dataframe = populate_data
 
-        self.url = 'http://0.0.0.0:5000/extract'
+        self.url = 'http://127.0.0.1:5010/extract'
 
 
     def data_formulation(self):
