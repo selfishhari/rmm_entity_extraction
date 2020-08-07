@@ -1,7 +1,7 @@
 
 #!/bin/bash
-export rmm_user=username
-export rmm_password=password
+export rmm_user="$rmm_user"
+export rmm_password="$rmm_password"
 source /home/ec2-user/rmm_entity_extraction/rmm_venv/bin/activate            #change path for virtual environment
 cd /home/ec2-user/rmm_entity_extraction					   #change path for working directory
 gunicorn -c gunicorn.conf -b 0.0.0.0:5000 deploy_extraction_service:app
