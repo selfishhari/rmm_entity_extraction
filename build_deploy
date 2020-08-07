@@ -71,6 +71,8 @@ deactivate
 
 ####start daemon service
 
+#### IMPORTANT:-----Update username and password in run.sh--------#
+
 sudo systemctl daemon-reload
 
 sudo systemctl start rmm
