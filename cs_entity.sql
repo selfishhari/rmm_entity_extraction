@@ -4,7 +4,7 @@ CREATE USER 'newuser'@'localhost' IDENTIFIED BY 'password';
 
 GRANT ALL PRIVILEGES ON * . * TO 'newuser'@'localhost';
 
-USE db_name;
+USE rootvj_db_shop_rmm;
 
 
 CREATE TABLE `cs_entity` (
