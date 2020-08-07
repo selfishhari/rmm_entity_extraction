@@ -68,10 +68,6 @@ gunicorn -c gunicorn.conf -b 0.0.0.0:5010 deploy_extraction_service:app
 
 deactivate 
 
-#### write daemon file
-
-cat sample_run > run.sh
-
 ####start daemon service
 
 sudo systemctl daemon-reload
