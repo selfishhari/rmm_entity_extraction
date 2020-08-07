@@ -19,6 +19,7 @@ sudo nano /etc/systemd/system/rmm.service
 ########## create username and password for mysql and create database
 
 ########## create new user and password and database and cs_entity table
+#If the below method doesn't work, create a username and password in mysql directly and update run.sh
 
 cat cs_entity.sql | mysql -u root -p 
 
