@@ -66,7 +66,7 @@ class MatchUser():
 
             self.service_extractor = ServiceExtractor(self.catalog)
 
-            print("Done")
+            print("Initialized Match User")
         except Exception as e:
             print("Constructor class")
             print(str(e))
@@ -270,7 +270,7 @@ class MatchUser():
 
             sort_value[brand]=rank
 
-        print(sort_value)
+        #print(sort_value)
 
         most_popular = min(sort_value,key=sort_value.get)
 
@@ -372,7 +372,7 @@ class MatchUser():
         #predicting service using naive bayes model
         predicted_service = self.service_extractor.predict_label(string)
 
-        print("predicted service",predicted_service)
+        #print("predicted service",predicted_service)
 
         extracted_dataframe['service'] = predicted_service
 
@@ -399,7 +399,7 @@ class MatchUser():
         #Dropping duplicates
         extracted_dataframe = extracted_dataframe.drop_duplicates()
 
-        print(extracted_dataframe)
+        print("Models Extracted")
 
         return extracted_dataframe
 
@@ -467,7 +467,7 @@ class MatchUser():
 
         lat_long_result = pd.read_sql_query(lat_long_query,self.db_engine)
 
-        print(lat_long_result)
+        #print(lat_long_result)
         latitude = lat_long_result.loc[0,'latitude']
 
         longitude = lat_long_result.loc[0,'longitude']
@@ -530,7 +530,7 @@ class MatchUser():
 
         lat_long['long_max'] = max(longitude_list)
 
-        print(lat_long)
+        #print(lat_long)
         return lat_long
 
     def _generate_lat_long(self,latitude,longitude,kms=5):
@@ -577,7 +577,7 @@ class MatchUser():
         #removing the user id of the customer
         user_id_list.remove(self.user_id)
 
-        print(user_id_list)
+        #print(user_id_list)
 
         return user_id_list
 
@@ -616,7 +616,7 @@ class MatchUser():
         else:
             available_models = pd.DataFrame()
 
-        print(available_models)
+        #print(available_models)
         return available_models
 
     def _dataframe_available_all_value(self):
@@ -699,7 +699,7 @@ class MatchUser():
 
                 final_df = available_models
 
-        print(final_df.columns)
+        #print(final_df.columns)
         return final_df
 
     def available_user_with_model_matching(self,latitude,longitude,matching_dataframe):
@@ -815,18 +815,18 @@ class MatchUser():
 
             #getting the dataframe of available model brand and service
             available_dataframe = self._dataframe_available_all_value()
-            print(available_dataframe)
+            #print(available_dataframe)
 
             #matching the available brand model and service with extracted dataframe
             matching_brand_service = self.get_matching_dataframe(extracted_dataframe,available_dataframe)
-            print(matching_brand_service)
+            #print(matching_brand_service)
 
             #upload status defines whether the extracted dataframe is successfully uploaded in the database
             if upload_status:
 
                 #getting the available user from matched messages according to users location
                 available_dataframe_final = self.available_user_with_model_matching(latitude,longitude,matching_brand_service)
-                print(available_dataframe_final)
+                #print(available_dataframe_final)
 
                 user_json = self.get_users_available(available_dataframe_final)
 
@@ -865,18 +865,18 @@ class MatchUser():
 
             #getting the dataframe of available model brand and service
             available_dataframe = self._dataframe_available_all_value()
-            print(available_dataframe)
+            #print(available_dataframe)
 
             #matching the available brand model and service with extracted dataframe
             matching_brand_service = self.get_matching_dataframe(extracted_dataframe,available_dataframe)
-            print(matching_brand_service)
+            #print(matching_brand_service)
 
             #upload status defines whether the extracted dataframe is successfully uploaded in the database
             if upload_status:
 
                 #getting the available user from matched messages according to users location
                 available_dataframe_final = self.available_user_with_model_matching(latitude,longitude,matching_brand_service)
-                print(available_dataframe_final)
+                #print(available_dataframe_final)
 
                 #getting the message ids
                 message_json = self.get_messages_available(available_dataframe_final)
