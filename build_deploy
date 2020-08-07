@@ -71,7 +71,7 @@ deactivate
 
 ####start daemon service
 
-#### IMPORTANT:-----Update username and password in run.sh--------#
+#### IMPORTANT:-----Update MySQL username and password in run.sh-------- U can use the one created above#
 
 sudo systemctl daemon-reload
 
