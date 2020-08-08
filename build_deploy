@@ -1,0 +1,87 @@
+#Scripts to build and deploy RMM application
+
+########### cloning the files from github
+sudo yum update -y
+sudo yum install git -y
+git clone -b vignesh --single-branch https://username:password@github.com/selfishhari/rmm_entity_extraction.git
+
+########### install mysql
+
+sudo yum install mysql-server -y
+sudo chkconfig mysqld on
+sudo service mysqld start
+
+###### writting daemon service file 
+###### copy and paste the sample_service in below file
+
+sudo nano /etc/systemd/system/rmm.service
+
+########## create username and password for mysql and create database
+
+########## create new user and password and database and cs_entity table
+#If the below method doesn't work, create a username and password in mysql directly and update run.sh
+
+cat cs_entity.sql | mysql -u root -p 
+
+##### refer build_developer script for configuring database #############
+
+##### install ngnix
+
+#sudo yum install epel-release
+
+#sudo yum install nginx
+
+#sudo systemctl start nginx
+
+########## Setting up python with anaconda
+
+cd rmm_entity_extraction/
+
+sudo yum install -y python3
+
+python3 -m venv rmm_venv
+
+source rmm_venv/bin/activate
+
+sudo yum install -y mysql-devel
+
+sudo yum install python-devel
+
+sudo yum -y install gcc
+
+pip install -U -r requirements.txt 
+
+#### downloading nltk packages#############
+
+bash nltk.sh
+
+################# install gunicorn
+
+pip install flask gunicorn
+
+mkdir logs
+
+############## build gunicorn
+
+gunicorn -c gunicorn.conf -b 0.0.0.0:5010 deploy_extraction_service:app
+
+###deactivate the virtual environment
+
+deactivate 
+
+
+#### IMPORTANT:-----Update MySQL username and password in run.sh-------- U can use the one created above#
+nano run.sh
+
+####start daemon service
+
+sudo systemctl daemon-reload
+
+sudo systemctl start rmm
+
+sudo systemctl enable rmm
+
+##### To stop the server ##### when you need to stop the server
+
+#sudo systemctl stop rmm 
+

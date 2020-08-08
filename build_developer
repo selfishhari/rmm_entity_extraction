@@ -1,0 +1,16 @@
+# script to configure database and database variables
+
+
+cd rmm_entity_extraction/
+
+### IF there is no existing database do the following
+
+cat rmm_extraction.sql | mysql -u <mysqluser> -p <dbname>
+
+
+#credential variables
+
+
+export rmm_user='USERNAME'    #db username
+
+export rmm_password='PASSWORD' #db password

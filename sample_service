@@ -1,0 +1,11 @@
+[Unit]
+Description=rmm_entity
+
+[Service]
+Type=simple
+ExecStart=/bin/bash /home/centos/rmm_entity_extraction/run.sh  
+
+[Install]
+WantedBy=multi-user.target
+
+
